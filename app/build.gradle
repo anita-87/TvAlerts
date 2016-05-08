@@ -1,0 +1,49 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 22
+    buildToolsVersion "21.1.2"
+    defaultConfig {
+        applicationId "com.tvalerts"
+        minSdkVersion 22
+        targetSdkVersion 22
+        versionCode 1
+        versionName "1.0"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    productFlavors {
+    }
+
+    packagingOptions {
+        exclude 'META-INF/notice.txt'
+        exclude 'META-INF/license.txt'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/NOTICE'
+    }
+}
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile 'com.android.support:appcompat-v7:22.0.0'
+    compile 'com.android.support:design:22.2.1'
+    compile 'com.github.marcohc:robotocalendarview:1.1.0'
+    compile 'org.springframework.android:spring-android-rest-template:2.0.0.M3'
+    compile 'com.fasterxml.jackson.core:jackson-databind:2.3.2'
+    compile 'com.squareup.picasso:picasso:2.5.2'
+    compile 'joda-time:joda-time:2.9.2'
+    compile 'org.jsoup:jsoup:1.9.1'
+
+}
+
+repositories {
+    maven {
+        url 'http://repo.spring.io/milestone'
+    }
+}
+
+

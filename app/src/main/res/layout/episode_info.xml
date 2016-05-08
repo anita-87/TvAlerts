@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="24dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/show_name_in_episode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:layout_marginTop="20dp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/colorAccent"
+            android:layout_marginTop="5dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="20dp"/>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <!-- Episode Name -->
+            <TextView
+                android:id="@+id/episode_name_in_episode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"/>
+
+            <!-- Season String -->
+            <TextView
+                android:id="@+id/episode_season_string"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/season"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="30dp"
+                android:layout_below="@+id/episode_name_in_episode"/>
+
+            <!-- Season -->
+            <TextView
+                android:id="@+id/episode_season"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="30dp"
+                android:layout_below="@+id/episode_name_in_episode"
+                android:layout_toRightOf="@+id/episode_season_string" />
+
+            <!-- Episode Number String -->
+            <TextView
+                android:id="@+id/episode_number_string"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/number"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="30dp"
+                android:layout_below="@+id/episode_season_string"/>
+
+            <!-- Episode Number -->
+            <TextView
+                android:id="@+id/episode_number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="30dp"
+                android:layout_below="@+id/episode_season_string"
+                android:layout_toRightOf="@+id/episode_number_string" />
+
+            <!-- Episode Airdate String -->
+            <TextView
+                android:id="@+id/episode_airdate_string"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/airdate"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="30dp"
+                android:layout_below="@+id/episode_number_string"/>
+
+            <!-- Episode Airdate -->
+            <TextView
+                android:id="@+id/episode_airdate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="30dp"
+                android:layout_below="@+id/episode_number_string"
+                android:layout_toRightOf="@+id/episode_airdate_string" />
+
+            <!-- Episode AirTime String -->
+            <TextView
+                android:id="@+id/episode_airtime_string"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/airtime"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="30dp"
+                android:layout_below="@+id/episode_airdate_string"/>
+
+            <!-- Episode AirTime -->
+            <TextView
+                android:id="@+id/episode_airtime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="30dp"
+                android:layout_below="@+id/episode_airdate_string"
+                android:layout_toRightOf="@+id/episode_airtime_string" />
+
+            <!-- Episode Summary String -->
+            <TextView
+                android:id="@+id/episode_summary_string"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/summary"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="30dp"
+                android:layout_below="@+id/episode_airtime_string"/>
+
+            <!-- Episode Summary -->
+            <TextView
+                android:id="@+id/episode_summary"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="40dp"
+                android:layout_marginEnd="30dp"
+                android:layout_below="@+id/episode_summary_string"/>
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</ScrollView>

@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.design.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <!-- Show Name -->
+            <TextView
+                android:id="@+id/show_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:gravity="center"
+                android:layout_marginTop="20dp"/>
+
+            <!-- Separator -->
+            <View
+                android:id="@+id/separator"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/darker_gray"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="2dp"/>
+
+            <LinearLayout
+                android:id="@+id/show_info_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="20dp">
+
+                <!-- Show Image -->
+                <ImageView
+                    android:id="@+id/imageView"
+                    android:layout_width="110dp"
+                    android:layout_height="154dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginEnd="20dp"/>
+
+                <!-- LinearLayout for each of the details of the show -->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <!-- LinearLayout for Show Status -->
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <!-- Show Status String -->
+                        <TextView
+                            android:id="@+id/show_status_string"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textStyle="bold"
+                            android:text="Status:"
+                            android:textColor="@color/black"
+                            android:layout_marginTop="20dp"
+                            android:layout_marginStart="10dp"/>
+
+                        <!-- Show Status -->
+                        <TextView
+                            android:id="@+id/show_status"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="20dp"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginEnd="10dp"
+                            android:textColor="@color/black"/>
+
+                    </LinearLayout>
+
+                    <!-- LinearLayout for Show Network -->
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <!-- Show Network String -->
+                        <TextView
+                            android:id="@+id/show_network_string"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textStyle="bold"
+                            android:text="Network:"
+                            android:textColor="@color/black"
+                            android:layout_marginTop="20dp"
+                            android:layout_marginStart="10dp"/>
+
+                        <!-- Show Network -->
+                        <TextView
+                            android:id="@+id/show_network"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="20dp"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginEnd="10dp"
+                            android:textColor="@color/black"/>
+
+                    </LinearLayout>
+
+                    <!-- LinearLayout for Show Schedule -->
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <!-- Show Schedule String -->
+                        <TextView
+                            android:id="@+id/show_schedule_string"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textStyle="bold"
+                            android:text="Scheduled:"
+                            android:textColor="@color/black"
+                            android:layout_marginTop="20dp"
+                            android:layout_marginStart="10dp"/>
+
+                        <!-- Show Schedule -->
+                        <TextView
+                            android:id="@+id/show_schedule"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="20dp"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginEnd="10dp"
+                            android:textColor="@color/black"/>
+
+                    </LinearLayout>
+
+                </LinearLayout>  <!-- LinearLayout for each of the details of the show -->
+
+
+
+            </LinearLayout>
+
+            <!-- Show Summary String -->
+            <TextView
+                android:id="@+id/show_summary_string"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:text="Summary:"
+                android:textColor="@color/black"
+                android:layout_marginTop="20dp"
+                android:layout_marginStart="10dp"/>
+
+            <!-- Show Schedule -->
+            <TextView
+                android:id="@+id/show_summary"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:textColor="@color/black" />
+
+            <TextView
+                android:id="@+id/dummyTextView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="40dp" />
+
+        </LinearLayout>
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/add_show_fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:clickable="true"
+            android:src="@drawable/ic_add_white_24dp"
+            app:layout_anchor="@+id/dummyTextView"
+            app:layout_anchorGravity="bottom|right|end"
+            app:backgroundTint="#303F9F"
+            app:rippleColor="#FFFFFF" />
+
+    </android.support.design.widget.CoordinatorLayout>
+
+</RelativeLayout>

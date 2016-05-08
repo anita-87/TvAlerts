@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+
+    <include android:id="@+id/appBar" layout="@layout/toolbar" />
+
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginLeft="5dp"
+        tools:context=".MainActivity">
+
+        <com.marcohc.robotocalendar.RobotoCalendarView
+            android:id="@+id/robotoCalendarPicker"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        </com.marcohc.robotocalendar.RobotoCalendarView>
+
+        <TextView
+            android:id="@+id/currentDayText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorAccent"
+            android:textColor="@color/color_white"
+            android:paddingLeft="20dp"/>
+
+        <ListView
+            android:id="@+id/currentDayEpisodes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        </ListView>
+
+    </LinearLayout>
+
+</LinearLayout>

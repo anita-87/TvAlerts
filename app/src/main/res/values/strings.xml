@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">TvAlerts</string>
+    <string name="add_show">Add a show</string>
+    <string name="search">Search</string>
+    <string name="search_hint">Write a show</string>
+    <string name="obtaining_results">Obtaining results ...</string>
+    <string name="results_title">Results:</string>
+    <string name="show">Show</string>
+    <string name="cast">Cast</string>
+    <string name="loading">Loading ...</string>
+    <string name="show_stored">Show stored into the system</string>
+    <string name="show_not_stored">Show not stored, because is not a running show</string>
+    <string name="season">Season:</string>
+    <string name="number">Number:</string>
+    <string name="airdate">Air Date:</string>
+    <string name="airtime">Air Time:</string>
+    <string name="summary">Summary:</string>
+    <string name="no_summary_available">Not summary available.</string>
+    <string name="my_shows">My Shows</string>
+    <string name="delete">Delete</string>
+</resources>
