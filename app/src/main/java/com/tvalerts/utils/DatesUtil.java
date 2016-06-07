@@ -6,6 +6,7 @@ import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
+import org.joda.time.DateTimeConstants;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -18,6 +19,8 @@ import java.util.Locale;
 public class DatesUtil {
 
     private static final String TAG = "DatesUtil";
+
+    private static final String STANDARD_DATE_PATTERN = "yyyy-MM-dd";
 
     public static List<String> getMonthStrings(int currentMonth){
         //Update the currentMonth since in the Calendar starts at 0 for January
@@ -50,7 +53,7 @@ public class DatesUtil {
 
     public static String dateWithSimpleFormat(Date date){
         DateTime dateTime = new DateTime(date);
-        DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern("yyyy-MM-dd");
+        DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern(STANDARD_DATE_PATTERN);
         return dateTimeFormatter.withLocale(Locale.ENGLISH).print(dateTime);
     }
 
@@ -61,6 +64,38 @@ public class DatesUtil {
 
     public static Date firstDayOfMonth(int month, int year){
         return new DateTime(year, month, 1, 0, 0).toDate();
+    }
+
+    public static String getDayOfWeek(String date){
+        DateTimeFormatter dateTimeFormat = DateTimeFormat.forPattern(STANDARD_DATE_PATTERN);
+        DateTime dateTime = dateTimeFormat.parseDateTime(date);
+        int dayOfWeekInt = dateTime.getDayOfWeek();
+        String dayOfWeek = "";
+        switch (dayOfWeekInt){
+            case DateTimeConstants.MONDAY:
+                dayOfWeek = "Monday";
+                break;
+            case DateTimeConstants.TUESDAY:
+                dayOfWeek = "Tuesday";
+                break;
+            case  DateTimeConstants.WEDNESDAY:
+                dayOfWeek = "Wednesday";
+                break;
+            case DateTimeConstants.THURSDAY:
+                dayOfWeek = "Thursday";
+                break;
+            case DateTimeConstants.FRIDAY:
+                dayOfWeek = "Friday";
+                break;
+            case DateTimeConstants.SATURDAY:
+                dayOfWeek = "Saturday";
+                break;
+            case DateTimeConstants.SUNDAY:
+                dayOfWeek = "Sunday";
+                break;
+        }
+
+        return dayOfWeek;
     }
 
 }

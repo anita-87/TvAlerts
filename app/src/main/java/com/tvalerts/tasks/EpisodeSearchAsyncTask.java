@@ -3,12 +3,14 @@ package com.tvalerts.tasks;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.text.format.DateUtils;
 import android.util.ArrayMap;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 
 import com.tvalerts.R;
 import com.tvalerts.domain.Episode;
+import com.tvalerts.domain.Show;
 import com.tvalerts.interfaces.EpisodeSearchResponse;
 import com.tvalerts.utils.DatesUtil;
 
@@ -17,6 +19,7 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -28,6 +31,7 @@ public class EpisodeSearchAsyncTask extends AsyncTask<Void, Void, Map<String, Li
 
     private static final String TAG = "EpisodeSearchAsyncTask";
     private static final String URL = "http://api.tvmaze.com/shows/{id}/episodesbydate?date={date}";
+    private static final String URL_SHOWS = "http://api.tvmaze.com/shows/{id}";
 
     private Context context;
     private Map<String, String> shows;
@@ -114,10 +118,15 @@ public class EpisodeSearchAsyncTask extends AsyncTask<Void, Void, Map<String, Li
 
             for (Map.Entry<String, String> showEntry : shows.entrySet()){
                 try {
-                    ep = restTemplate.getForObject(URL, Episode[].class, showEntry.getKey(), date);
-                    for (int i=0; i<ep.length; i++){
-                        ep[i].setShow(showEntry.getValue());
-                        episodesByDate.add(ep[i]);
+                    Show show = restTemplate.getForObject(URL_SHOWS, Show.class, showEntry.getKey());
+                    if(haveToCheckDate(show.getSchedule().getDays(), date)){
+                        ep = restTemplate.getForObject(URL, Episode[].class, showEntry.getKey(), date);
+                        for (int i=0; i<ep.length; i++){
+                            ep[i].setShow(showEntry.getValue());
+                            episodesByDate.add(ep[i]);
+                        }
+                    } else {
+                        Log.d(TAG, "Not checking episodes for show '"+showEntry.getValue()+ "' and date '"+date+"'");
                     }
                 } catch (HttpClientErrorException e){
                     //TODO: handle tother exceptions
@@ -128,6 +137,12 @@ public class EpisodeSearchAsyncTask extends AsyncTask<Void, Void, Map<String, Li
             }
             result.put(date, episodesByDate);
         }
+        return result;
+    }
+
+    private boolean haveToCheckDate(String[] daysWeekAiring, String date){
+        String dayOfWeek = DatesUtil.getDayOfWeek(date);
+        boolean result = Arrays.asList(daysWeekAiring).contains(dayOfWeek);
         return result;
     }
 }
