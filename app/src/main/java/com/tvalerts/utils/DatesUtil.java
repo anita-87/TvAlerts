@@ -3,6 +3,7 @@ package com.tvalerts.utils;
 import android.util.Log;
 
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeField;
 import org.joda.time.LocalDate;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -22,11 +23,12 @@ public class DatesUtil {
 
     private static final String STANDARD_DATE_PATTERN = "yyyy-MM-dd";
 
-    public static List<String> getMonthStrings(int currentMonth){
+    public static List<String> getMonthStrings(int currentMonth, int currentYear){
         //Update the currentMonth since in the Calendar starts at 0 for January
         List<String> results = new ArrayList<>();
         LocalDate date = new LocalDate();
         date = date.withMonthOfYear(currentMonth);
+        date.withYear(currentYear);
         LocalDate firstDayMonth = date.minusDays(date.getDayOfMonth() - 1);
         LocalDate lastDayMonth = firstDayMonth.plusDays(firstDayMonth.dayOfMonth().getMaximumValue() - 1);
 
@@ -96,6 +98,24 @@ public class DatesUtil {
         }
 
         return dayOfWeek;
+    }
+
+    public static boolean isSameMonthDate(String date, int month, int year){
+        boolean result = false;
+        DateTimeFormatter dateTimeFormat = DateTimeFormat.forPattern(STANDARD_DATE_PATTERN);
+        DateTime dateTime = dateTimeFormat.parseDateTime(date);
+        if(dateTime.getYear() == year)
+            if ( dateTime.getMonthOfYear() == month)
+            result = true;
+        return result;
+    }
+
+    public static boolean isSameDate(String date, String dateToCompareTo){
+        DateTimeFormatter dateTimeFormat = DateTimeFormat.forPattern(STANDARD_DATE_PATTERN);
+        DateTime dateTime = dateTimeFormat.parseDateTime(date);
+        DateTime dateTimeToCompareTo = dateTimeFormat.parseDateTime(dateToCompareTo);
+        return dateTime.withTimeAtStartOfDay().equals(dateTimeToCompareTo.withTimeAtStartOfDay());
+
     }
 
 }

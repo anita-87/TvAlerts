@@ -54,6 +54,7 @@ public class MainActivity extends AppCompatActivity implements RobotoCalendarVie
     private ListView episodeListView;
     private EpisodeListAdapter episodeListAdapter;
     private int currentMonthIndex;
+    private int currentYear;
     private Calendar currentCalendar;
     private Date selectedDate;
     private Date currentDate;
@@ -86,6 +87,7 @@ public class MainActivity extends AppCompatActivity implements RobotoCalendarVie
         //Initialize the RobotCalendarPicker with the current index and date
         currentCalendar = Calendar.getInstance();
         currentMonthIndex = currentCalendar.get(Calendar.MONTH);
+        currentYear = currentCalendar.get(Calendar.YEAR);
 
         //Mark current day
         robotoCalendarView.markDayAsCurrentDay(currentCalendar.getTime());
@@ -107,7 +109,7 @@ public class MainActivity extends AppCompatActivity implements RobotoCalendarVie
         monthlyEpisodes = new ArrayMap<String, List<Episode>>();
 
         //Create the asyncTask
-        EpisodeSearchAsyncTask asyncTask = new EpisodeSearchAsyncTask(this, this.loadStoredShows(), currentMonthIndex+1);
+        EpisodeSearchAsyncTask asyncTask = new EpisodeSearchAsyncTask(this, this.loadStoredShows(), currentMonthIndex+1, currentYear);
         asyncTask.delegate = this;
         asyncTask.execute();
     }
@@ -134,13 +136,13 @@ public class MainActivity extends AppCompatActivity implements RobotoCalendarVie
 
     @Override
     public void onRightButtonClick() {
-        currentMonthIndex++;
+        updateCurrentMonthIndex("+");
         updateCalendar();
     }
 
     @Override
     public void onLeftButtonClick() {
-        currentMonthIndex--;
+        updateCurrentMonthIndex("-");
         updateCalendar();
     }
 
@@ -188,6 +190,7 @@ public class MainActivity extends AppCompatActivity implements RobotoCalendarVie
 
     private void updateCalendar(){
         currentCalendar.set(Calendar.MONTH, currentMonthIndex);
+        currentCalendar.set(Calendar.YEAR, currentYear);
 
         if ((DatesUtil.getMonthIndex(this.currentDate) - 1) != currentMonthIndex){
             this.selectedDate = DatesUtil.firstDayOfMonth(currentCalendar.get(Calendar.MONTH) + 1 , currentCalendar.get(Calendar.YEAR));
@@ -198,7 +201,7 @@ public class MainActivity extends AppCompatActivity implements RobotoCalendarVie
         this.setCurrentDateText(this.selectedDate);
 
         //Create the asyncTask
-        EpisodeSearchAsyncTask asyncTask = new EpisodeSearchAsyncTask(this, this.loadStoredShows(), currentMonthIndex+1);
+        EpisodeSearchAsyncTask asyncTask = new EpisodeSearchAsyncTask(this, this.loadStoredShows(), currentMonthIndex+1, currentYear);
         asyncTask.delegate = this;
         asyncTask.execute();
     }
@@ -245,5 +248,23 @@ public class MainActivity extends AppCompatActivity implements RobotoCalendarVie
         HashMap<String, String> loadedShows = (HashMap<String, String>) loadStoredShows();
         intent.putExtra("loadedShows", loadedShows);
         startActivity(intent);
+    }
+
+    private void updateCurrentMonthIndex(String operator){
+        if (operator.equals("+")) {
+            this.currentMonthIndex += 1;
+            if (this.currentMonthIndex == 12) {
+                this.currentMonthIndex = 0;
+                this.currentYear++;
+            }
+        }
+        if (operator.equals("-")) {
+            this.currentMonthIndex -= 1;
+            if (this.currentMonthIndex == -1) {
+                this.currentMonthIndex = 11;
+                this.currentYear--;
+            }
+        }
+
     }
 }

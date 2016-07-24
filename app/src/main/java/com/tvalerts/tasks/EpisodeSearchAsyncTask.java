@@ -20,6 +20,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -36,15 +37,17 @@ public class EpisodeSearchAsyncTask extends AsyncTask<Void, Void, Map<String, Li
     private Context context;
     private Map<String, String> shows;
     private int currentMonth;
+    private int currentYear;
     private ProgressDialog progressDialog;
     private RestTemplate restTemplate;
 
     public EpisodeSearchResponse delegate = null;
 
-    public EpisodeSearchAsyncTask(Context context,Map<String, String> shows, int currentMonth){
+    public EpisodeSearchAsyncTask(Context context,Map<String, String> shows, int currentMonth, int currentYear){
         this.context = context;
         this.shows = shows;
         this.currentMonth = currentMonth;
+        this.currentYear = currentYear;
         this.restTemplate = new RestTemplate();
         this.restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
     }
@@ -62,7 +65,7 @@ public class EpisodeSearchAsyncTask extends AsyncTask<Void, Void, Map<String, Li
     @Override
     protected Map<String, List<Episode>> doInBackground(Void... params) {
         try {
-            return this.getEpisodesByDate();
+            return this.getEmittingEpisodes();
         } catch (Exception e){
             return null;
         }
@@ -79,26 +82,20 @@ public class EpisodeSearchAsyncTask extends AsyncTask<Void, Void, Map<String, Li
         }
     }
 
-    private List<Episode> getEpisodes(){
-        List<String> dates = DatesUtil.getMonthStrings(currentMonth);
-        List<Episode> result = new ArrayList<Episode>();
-        Episode[] episodes = null;
-        Map<String, List<Episode>> r = new ArrayMap<String, List<Episode>>();
-        //Iterate through the shows to get the episodes
+    private Map<String, List<Episode>> getEmittingEpisodes(){
+        Map<String, List<Episode>> result = this.initializeMapResponse();
         for (Map.Entry<String, String> showEntry : shows.entrySet()){
-            Iterator<String> datesIterator = dates.iterator();
-            while (datesIterator.hasNext()){
-                String date = datesIterator.next();
-                try {
-                    episodes = restTemplate.getForObject(URL, Episode[].class, showEntry.getKey(), date);
-                    for(int i =0; i<episodes.length; i++){
-                        episodes[i].setShow(showEntry.getValue());
-                        result.add(episodes[i]);
-                    }
-                } catch (HttpClientErrorException e){
-                    //TODO: Handle other exceptions
-                    if (e.getStatusCode().value() != 404){
-                        throw e;
+            //Gets all the episodes for the show and month and year
+            Log.i(TAG, "Obtaining all the episodes for show: '"+showEntry.getValue()+"'");
+            List<Episode> episodes = this.getAlEpisodes(showEntry.getKey());
+            for (Map.Entry<String, List<Episode>> element : result.entrySet()){
+                Iterator<Episode> episodeIterator = episodes.iterator();
+                while (episodeIterator.hasNext()){
+                    Episode episode = episodeIterator.next();
+                    episode.setShow(showEntry.getValue());
+                    if (DatesUtil.isSameDate(episode.getAirdate(), element.getKey())){
+                        Log.d(TAG, "Adding episode '"+episode.getName()+"' for show '"+episode.getShow()+ "to date "+element.getKey());
+                        element.getValue().add(episode);
                     }
                 }
             }
@@ -106,43 +103,40 @@ public class EpisodeSearchAsyncTask extends AsyncTask<Void, Void, Map<String, Li
         return result;
     }
 
-    private Map<String, List<Episode>> getEpisodesByDate(){
-        List<String> dates = DatesUtil.getMonthStrings(currentMonth);
-        Map<String, List<Episode>> result = new ArrayMap<String, List<Episode>>();
-        Iterator<String> datesIterator = dates.iterator();
-        //Iterate through the dates to get all the episodes by date
-        while (datesIterator.hasNext()){
-            String date = datesIterator.next();
-            List<Episode> episodesByDate = new ArrayList<Episode>();
-            Episode[] ep = null;
-
-            for (Map.Entry<String, String> showEntry : shows.entrySet()){
-                try {
-                    Show show = restTemplate.getForObject(URL_SHOWS, Show.class, showEntry.getKey());
-                    if(haveToCheckDate(show.getSchedule().getDays(), date)){
-                        ep = restTemplate.getForObject(URL, Episode[].class, showEntry.getKey(), date);
-                        for (int i=0; i<ep.length; i++){
-                            ep[i].setShow(showEntry.getValue());
-                            episodesByDate.add(ep[i]);
-                        }
-                    } else {
-                        Log.d(TAG, "Not checking episodes for show '"+showEntry.getValue()+ "' and date '"+date+"'");
-                    }
-                } catch (HttpClientErrorException e){
-                    //TODO: handle tother exceptions
-                    if (e.getStatusCode().value() != 404){
-                        throw e;
-                    }
-                }
-            }
-            result.put(date, episodesByDate);
+    private List<Episode> getAlEpisodes(String showId){
+        Episode[] episodes = null;
+        List<Episode> results = new ArrayList<Episode>();
+        try {
+            episodes = restTemplate.getForObject("http://api.tvmaze.com/shows/{id}/episodes", Episode[].class, showId);
+            results = filterEpisodesByMonth(Arrays.asList(episodes), currentMonth, currentYear);
+            return results;
+        } catch (HttpClientErrorException e){
+            //TODO: handle the exceptions
+            Log.e(TAG, e.getMessage());
+            throw e;
         }
-        return result;
     }
 
-    private boolean haveToCheckDate(String[] daysWeekAiring, String date){
-        String dayOfWeek = DatesUtil.getDayOfWeek(date);
-        boolean result = Arrays.asList(daysWeekAiring).contains(dayOfWeek);
+    private List<Episode> filterEpisodesByMonth(List<Episode> episodes, int currentMonth, int currentYear){
+        Log.d(TAG, "Filtering out only the episodes for month '"+currentMonth+"' and year '"+currentYear+"'");
+        List<Episode> result = new ArrayList<Episode>();
+        Iterator<Episode> episodeIterator = episodes.iterator();
+        while (episodeIterator.hasNext()){
+            Episode episode = episodeIterator.next();
+            if(DatesUtil.isSameMonthDate(episode.getAirdate(), currentMonth, currentYear))
+                result.add(episode);
+        }
+        return  result;
+    }
+
+    private Map<String, List<Episode>> initializeMapResponse(){
+        Map<String, List<Episode>> result = new HashMap<String, List<Episode>>();
+        List<String> dates = DatesUtil.getMonthStrings(currentMonth, currentYear);
+        Iterator<String> iterator = dates.iterator();
+        while (iterator.hasNext()){
+            String dateString = iterator.next();
+            result.put(dateString, new ArrayList<Episode>());
+        }
         return result;
     }
 }
