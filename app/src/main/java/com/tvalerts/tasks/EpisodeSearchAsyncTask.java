@@ -94,7 +94,7 @@ public class EpisodeSearchAsyncTask extends AsyncTask<Void, Void, Map<String, Li
                     Episode episode = episodeIterator.next();
                     episode.setShow(showEntry.getValue());
                     if (DatesUtil.isSameDate(episode.getAirdate(), element.getKey())){
-                        Log.d(TAG, "Adding episode '"+episode.getName()+"' for show '"+episode.getShow()+ "to date "+element.getKey());
+                        Log.d(TAG, "Adding episode '"+episode.getName()+"' for show '"+episode.getShow()+ " to date "+element.getKey());
                         element.getValue().add(episode);
                     }
                 }

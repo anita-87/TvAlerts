@@ -39,6 +39,8 @@ public class DatesUtil {
             i++;
             date = date.withDayOfMonth(i);
         }
+        //Add the last date of the month.
+        results.add(lastDayMonth.toString());
 
         return results;
     }
