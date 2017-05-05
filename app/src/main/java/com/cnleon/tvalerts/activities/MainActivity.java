@@ -1,5 +1,7 @@
-package com.cnleon.tvalerts;
+package com.cnleon.tvalerts.activities;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -12,6 +14,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+
+import com.cnleon.tvalerts.R;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -85,7 +89,10 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_my_shows) {
 
         } else if (id == R.id.nav_search) {
-
+            // Start the SearchActivity
+            Context context = MainActivity.this;
+            Intent searchActivityIntent = new Intent(context, SearchActivity.class);
+            startActivity(searchActivityIntent);
         } else if (id == R.id.nav_settings) {
 
         }
