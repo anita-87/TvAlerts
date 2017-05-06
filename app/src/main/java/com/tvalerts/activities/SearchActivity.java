@@ -1,4 +1,4 @@
-package com.cnleon.tvalerts.activities;
+package com.tvalerts.activities;
 
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
