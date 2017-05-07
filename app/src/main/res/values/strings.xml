@@ -4,6 +4,7 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
+    <string name="error_message_connectivity">Failed to obtain results, please try again.</string>
     <string name="action_settings">Settings</string>
     <string name="calendar">Calendar</string>
     <string name="my_shows">My Shows</string>

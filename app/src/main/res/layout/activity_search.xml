@@ -1,8 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.cnleon.tvalerts.activities.SearchActivity">
+    android:orientation="vertical"
+    tools:context="com.tvalerts.activities.SearchActivity">
 
-</android.support.constraint.ConstraintLayout>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_shows"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </android.support.v7.widget.RecyclerView>
+
+        <TextView
+            android:id="@+id/tv_error_message_display"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/error_message_display_padding"
+            android:text="@string/error_message_connectivity"
+            android:textSize="@dimen/text_size_22_sp"
+            android:visibility="invisible" />
+
+        <ProgressBar
+            android:id="@+id/pb_shows_loading_indicator"
+            android:layout_width="@dimen/pb_indicator_size"
+            android:layout_height="@dimen/pb_indicator_size"
+            android:layout_gravity="center"
+            android:visibility="invisible" />
+
+    </FrameLayout>
+
+</LinearLayout>
