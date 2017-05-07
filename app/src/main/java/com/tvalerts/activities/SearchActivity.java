@@ -5,10 +5,13 @@ import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -28,7 +31,7 @@ public class SearchActivity extends AppCompatActivity {
     private TextView mErrorMessageDisplay;
     private ProgressBar mProgressBarIndicator;
     private ShowAdapter mShowAdapter;
-    private RecyclerView mShowsList;
+    private RecyclerView mShowsRecyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,15 +42,11 @@ public class SearchActivity extends AppCompatActivity {
         // Init the variables
         mErrorMessageDisplay = (TextView) findViewById(R.id.tv_error_message_display);
         mProgressBarIndicator = (ProgressBar) findViewById(R.id.pb_shows_loading_indicator);
-        mShowsList = (RecyclerView) findViewById(R.id.rv_shows);
+        mShowsRecyclerView = (RecyclerView) findViewById(R.id.rv_shows);
         //Assign the LinearLayoutManager
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        mShowsList.setLayoutManager(layoutManager);
-        mShowsList.setHasFixedSize(true);
-        //Create the adapter
-        mShowAdapter = new ShowAdapter();
-        //Conect the LayoutManager with the adapter
-        mShowsList.setAdapter(mShowAdapter);
+        mShowsRecyclerView.setLayoutManager(layoutManager);
+        mShowsRecyclerView.setHasFixedSize(true);
         // Load all the shows from the API
         loadAllShows();
     }
@@ -66,6 +65,10 @@ public class SearchActivity extends AppCompatActivity {
         Drawable searchIcon = menu.getItem(0).getIcon();
         searchIcon.mutate();
         searchIcon.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.white), PorterDuff.Mode.SRC_IN);
+        // Set up the search functionality
+        MenuItem searchItem = menu.findItem(R.id.action_seach);
+        SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        search(searchView);
         return true;
     }
 
@@ -75,6 +78,21 @@ public class SearchActivity extends AppCompatActivity {
 
     private void showErrorMessage() {
         mErrorMessageDisplay.setVisibility(View.VISIBLE);
+    }
+
+    public void search(SearchView searchView) {
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                mShowAdapter.getFilter().filter(newText);
+                return false;
+            }
+        });
     }
 
     public class ShowsQueryTask extends AsyncTask<Void, Void, List<Show>> {
@@ -94,6 +112,8 @@ public class SearchActivity extends AppCompatActivity {
         protected void onPostExecute(List<Show> shows) {
             mProgressBarIndicator.setVisibility(View.INVISIBLE);
             if (shows != null) {
+                mShowAdapter = new ShowAdapter(shows);
+                mShowsRecyclerView.setAdapter(mShowAdapter);
                 mShowAdapter.setShowData(shows);
             } else
                 showErrorMessage();
