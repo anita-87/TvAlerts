@@ -2,14 +2,17 @@ package com.tvalerts.activities;
 
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
-import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.Loader;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,10 +26,10 @@ import com.tvalerts.utils.NetworkUtils;
 
 import java.util.List;
 
-public class SearchActivity extends AppCompatActivity {
+public class SearchActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<List<Show>> {
 
     private static final String TAG = SearchActivity.class.getSimpleName();
-    private static final int NUM_LIST_ITEMS = 100;
+    private static final int ALL_SHOWS_SEARCH_LOADER = 22;
 
     private TextView mErrorMessageDisplay;
     private ProgressBar mProgressBarIndicator;
@@ -47,6 +50,8 @@ public class SearchActivity extends AppCompatActivity {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         mShowsRecyclerView.setLayoutManager(layoutManager);
         mShowsRecyclerView.setHasFixedSize(true);
+        // Initialize the loader
+        getSupportLoaderManager().initLoader(ALL_SHOWS_SEARCH_LOADER, null, this);
         // Load all the shows from the API
         loadAllShows();
     }
@@ -72,8 +77,68 @@ public class SearchActivity extends AppCompatActivity {
         return true;
     }
 
+    @Override
+    public Loader<List<Show>> onCreateLoader(int id, final Bundle args) {
+        return new AsyncTaskLoader<List<Show>>(this) {
+
+            List<Show> mAllShowsReceived;
+
+            @Override
+            protected void onStartLoading() {
+                super.onStartLoading();
+                mProgressBarIndicator.setVisibility(View.VISIBLE);
+                if (mAllShowsReceived != null) {
+                    deliverResult(mAllShowsReceived);
+                } else {
+                    forceLoad();
+                }
+            }
+
+            @Override
+            public List<Show> loadInBackground() {
+                try {
+                    return NetworkUtils.getAllShows();
+                } catch (Exception e) {
+                    Log.e(TAG, "There was an error trying to obtain the shows.");
+                    Log.e(TAG, e.getMessage());
+                    e.printStackTrace();
+                    return null;
+                }
+            }
+
+            @Override
+            public void deliverResult(List<Show> data) {
+                mAllShowsReceived = data;
+                super.deliverResult(mAllShowsReceived);
+            }
+        };
+    }
+
+    @Override
+    public void onLoadFinished(Loader<List<Show>> loader, List<Show> data) {
+        mProgressBarIndicator.setVisibility(View.INVISIBLE);
+        if (data != null) {
+            mShowAdapter = new ShowAdapter(data);
+            mShowsRecyclerView.setAdapter(mShowAdapter);
+            mShowAdapter.setShowData(data);
+        } else
+            showErrorMessage();
+    }
+
+    @Override
+    public void onLoaderReset(Loader<List<Show>> loader) {
+
+    }
+
     private void loadAllShows() {
-        new ShowsQueryTask().execute();
+        // Configure the loader
+        LoaderManager loaderManager = getSupportLoaderManager();
+        Loader<List<Show>> allShowsSearchLoader = loaderManager.getLoader(ALL_SHOWS_SEARCH_LOADER);
+        if (allShowsSearchLoader == null) {
+            loaderManager.initLoader(ALL_SHOWS_SEARCH_LOADER, null, this);
+        } else {
+            loaderManager.restartLoader(ALL_SHOWS_SEARCH_LOADER, null, this);
+        }
     }
 
     private void showErrorMessage() {
@@ -95,28 +160,4 @@ public class SearchActivity extends AppCompatActivity {
         });
     }
 
-    public class ShowsQueryTask extends AsyncTask<Void, Void, List<Show>> {
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            mProgressBarIndicator.setVisibility(View.VISIBLE);
-        }
-
-        @Override
-        protected List<Show> doInBackground(Void... params) {
-            return NetworkUtils.getAllShows();
-        }
-
-        @Override
-        protected void onPostExecute(List<Show> shows) {
-            mProgressBarIndicator.setVisibility(View.INVISIBLE);
-            if (shows != null) {
-                mShowAdapter = new ShowAdapter(shows);
-                mShowsRecyclerView.setAdapter(mShowAdapter);
-                mShowAdapter.setShowData(shows);
-            } else
-                showErrorMessage();
-        }
-    }
 }
