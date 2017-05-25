@@ -1,32 +1,28 @@
 package com.tvalerts.adapters;
 
 import android.content.Context;
+import android.database.Cursor;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Filter;
-import android.widget.Filterable;
 import android.widget.TextView;
 
 import com.cnleon.tvalerts.R;
-import com.tvalerts.domain.Show;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.tvalerts.activities.SearchActivity;
 
 /**
  * Created by anita on 6/05/17.
  */
 
-public class ShowAdapter extends RecyclerView.Adapter<ShowAdapter.ShowViewHolder> implements Filterable {
+public class ShowAdapter extends RecyclerView.Adapter<ShowAdapter.ShowViewHolder> {
 
-    private List<Show> mShowsData;
-    private List<Show> mFilteredShowsData;
+    private final Context mContext;
+    private Cursor mCursor;
 
-    public ShowAdapter(List<Show> showList) {
-        mShowsData = showList;
-        mFilteredShowsData = showList;
+    public ShowAdapter(@NonNull Context context) {
+        mContext = context;
     }
 
     @Override
@@ -44,16 +40,23 @@ public class ShowAdapter extends RecyclerView.Adapter<ShowAdapter.ShowViewHolder
 
     @Override
     public void onBindViewHolder(ShowViewHolder showViewHolder, int position) {
-        String showName = mFilteredShowsData.get(position).getName();
+        mCursor.moveToPosition(position);
+        String showName = mCursor.getString(SearchActivity.INDEX_SHOW_NAME);
         showViewHolder.listItemShowTextView.setText(showName);
     }
 
     @Override
     public int getItemCount() {
-        if (null == mFilteredShowsData) return 0;
-        return mFilteredShowsData.size();
+        if (mCursor == null) return 0;
+        return mCursor.getCount();
     }
 
+    public void swapCursor(Cursor newCursor) {
+        mCursor = newCursor;
+        notifyDataSetChanged();
+    }
+
+    /*
     @Override
     public Filter getFilter() {
         return new Filter() {
@@ -82,12 +85,7 @@ public class ShowAdapter extends RecyclerView.Adapter<ShowAdapter.ShowViewHolder
                 notifyDataSetChanged();
             }
         };
-    }
-
-    public void setShowData(List<Show> showsData) {
-        mFilteredShowsData = showsData;
-        notifyDataSetChanged();
-    }
+    }*/
 
     class ShowViewHolder extends RecyclerView.ViewHolder {
 

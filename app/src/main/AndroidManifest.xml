@@ -12,6 +12,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <!-- Activities Section -->
         <activity
             android:name="com.tvalerts.activities.MainActivity"
             android:label="@string/app_name"
@@ -30,6 +31,10 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.tvalerts.activities.MainActivity" />
         </activity>
+        <!-- Providers Section -->
+        <provider
+            android:name="com.tvalerts.data.providers.ShowProvider"
+            android:authorities="@string/content_authority" />
     </application>
 
 </manifest>

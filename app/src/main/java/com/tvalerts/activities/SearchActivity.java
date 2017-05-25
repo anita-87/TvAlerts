@@ -1,40 +1,49 @@
 package com.tvalerts.activities;
 
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.Cursor;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
-import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import com.cnleon.tvalerts.R;
 import com.tvalerts.adapters.ShowAdapter;
+import com.tvalerts.data.ShowsContract;
 import com.tvalerts.domain.Show;
-import com.tvalerts.utils.NetworkUtils;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
-public class SearchActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<List<Show>> {
+import static com.tvalerts.data.ShowsContract.ShowEntry;
 
+public class SearchActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+
+    public static final String[] SHOW_PROJECTION = {
+            ShowsContract.ShowEntry.COLUMN_SHOW_NAME
+    };
+    public static final int INDEX_SHOW_NAME = 0;
     private static final String TAG = SearchActivity.class.getSimpleName();
     private static final int ALL_SHOWS_SEARCH_LOADER = 22;
-
-    private TextView mErrorMessageDisplay;
     private ProgressBar mProgressBarIndicator;
     private ShowAdapter mShowAdapter;
     private RecyclerView mShowsRecyclerView;
+    private int mPosition = RecyclerView.NO_POSITION;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,18 +51,29 @@ public class SearchActivity extends AppCompatActivity implements LoaderManager.L
         setContentView(R.layout.activity_search);
         // Set up the Navigation Up
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        // Insert Fake Data
+        List<ContentValues> contentValues = new ArrayList<>();
+        contentValues.add(createContentValues("65", "Bones", "http://www.tvmaze.com/shows/65/bones", "Scripted", "English", "Ended", "2005-09-13"));
+        contentValues.add(createContentValues("718", "The Tonight Show Starring Jimmy Fallon",
+                "http://api.tvmaze.com/shows/718", "Talk Show", "English", "Running", "2014-02-17"));
+        insertFakeData(this, contentValues);
         // Init the variables
-        mErrorMessageDisplay = (TextView) findViewById(R.id.tv_error_message_display);
         mProgressBarIndicator = (ProgressBar) findViewById(R.id.pb_shows_loading_indicator);
         mShowsRecyclerView = (RecyclerView) findViewById(R.id.rv_shows);
+
         //Assign the LinearLayoutManager
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         mShowsRecyclerView.setLayoutManager(layoutManager);
         mShowsRecyclerView.setHasFixedSize(true);
+
+        //Init the adapter
+        mShowAdapter = new ShowAdapter(this);
+        mShowsRecyclerView.setAdapter(mShowAdapter);
+        //Call the showLoading method
+        showLoading();
+
         // Initialize the loader
         getSupportLoaderManager().initLoader(ALL_SHOWS_SEARCH_LOADER, null, this);
-        // Load all the shows from the API
-        loadAllShows();
     }
 
     /**
@@ -78,56 +98,37 @@ public class SearchActivity extends AppCompatActivity implements LoaderManager.L
     }
 
     @Override
-    public Loader<List<Show>> onCreateLoader(int id, final Bundle args) {
-        return new AsyncTaskLoader<List<Show>>(this) {
+    public Loader<Cursor> onCreateLoader(int loaderId, final Bundle bundle) {
+        switch (loaderId) {
+            case ALL_SHOWS_SEARCH_LOADER:
+                Uri showQueryUri = ShowsContract.ShowEntry.CONTENT_URI;
+                String sortOrder = ShowsContract.ShowEntry.COLUMN_SHOW_NAME + " ASC";
 
-            List<Show> mAllShowsReceived;
+                return new CursorLoader(this,
+                        showQueryUri,
+                        SHOW_PROJECTION,
+                        null,
+                        null,
+                        sortOrder);
 
-            @Override
-            protected void onStartLoading() {
-                super.onStartLoading();
-                mProgressBarIndicator.setVisibility(View.VISIBLE);
-                if (mAllShowsReceived != null) {
-                    deliverResult(mAllShowsReceived);
-                } else {
-                    forceLoad();
-                }
-            }
-
-            @Override
-            public List<Show> loadInBackground() {
-                try {
-                    return NetworkUtils.getAllShows();
-                } catch (Exception e) {
-                    Log.e(TAG, "There was an error trying to obtain the shows.");
-                    Log.e(TAG, e.getMessage());
-                    e.printStackTrace();
-                    return null;
-                }
-            }
-
-            @Override
-            public void deliverResult(List<Show> data) {
-                mAllShowsReceived = data;
-                super.deliverResult(mAllShowsReceived);
-            }
-        };
+            default:
+                throw new UnsupportedOperationException("Loader Not Implemented: " + loaderId);
+        }
     }
 
     @Override
-    public void onLoadFinished(Loader<List<Show>> loader, List<Show> data) {
-        mProgressBarIndicator.setVisibility(View.INVISIBLE);
-        if (data != null) {
-            mShowAdapter = new ShowAdapter(data);
-            mShowsRecyclerView.setAdapter(mShowAdapter);
-            mShowAdapter.setShowData(data);
-        } else
-            showErrorMessage();
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        mShowAdapter.swapCursor(data);
+        if (mPosition == RecyclerView.NO_POSITION) mPosition = 0;
+        mShowsRecyclerView.smoothScrollToPosition(mPosition);
+
+        if (data.getCount() != 0)
+            showShoDataView();
     }
 
     @Override
-    public void onLoaderReset(Loader<List<Show>> loader) {
-
+    public void onLoaderReset(Loader<Cursor> loader) {
+        mShowAdapter.swapCursor(null);
     }
 
     private void loadAllShows() {
@@ -141,8 +142,40 @@ public class SearchActivity extends AppCompatActivity implements LoaderManager.L
         }
     }
 
-    private void showErrorMessage() {
-        mErrorMessageDisplay.setVisibility(View.VISIBLE);
+    private void showLoading() {
+        mShowsRecyclerView.setVisibility(View.INVISIBLE);
+        mProgressBarIndicator.setVisibility(View.VISIBLE);
+    }
+
+    private void showShoDataView() {
+        mProgressBarIndicator.setVisibility(View.INVISIBLE);
+        mShowsRecyclerView.setVisibility(View.VISIBLE);
+    }
+
+    private void insertFakeData(Context context, List<ContentValues> contentValues) {
+
+        List<ContentValues> fakeValues = new ArrayList<>();
+        Iterator<ContentValues> iterator = contentValues.iterator();
+        while (iterator.hasNext()) {
+            fakeValues.add(iterator.next());
+        }
+
+        context.getContentResolver().bulkInsert(ShowEntry.CONTENT_URI,
+                fakeValues.toArray(new ContentValues[contentValues.size()]));
+    }
+
+    private ContentValues createContentValues(String id, String name, String url,
+                                              String type, String language, String status, String premieredDate) {
+        ContentValues testShowsValues = new ContentValues();
+        // Bones
+        testShowsValues.put(ShowEntry.COLUMN_SHOW_API_ID, id);
+        testShowsValues.put(ShowEntry.COLUMN_SHOW_NAME, name);
+        testShowsValues.put(ShowEntry.COLUMN_SHOW_URL, url);
+        testShowsValues.put(ShowEntry.COLUMN_SHOW_TYPE, type);
+        testShowsValues.put(ShowEntry.COLUMN_SHOW_LANGUAGE, language);
+        testShowsValues.put(ShowEntry.COLUMN_SHOW_STATUS, status);
+        testShowsValues.put(ShowEntry.COLUMN_SHOW_PREMIERED, premieredDate);
+        return testShowsValues;
     }
 
     public void search(SearchView searchView) {
@@ -154,7 +187,7 @@ public class SearchActivity extends AppCompatActivity implements LoaderManager.L
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                mShowAdapter.getFilter().filter(newText);
+                //mShowAdapter.getFilter().filter(newText);
                 return false;
             }
         });

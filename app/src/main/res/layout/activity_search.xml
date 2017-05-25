@@ -17,15 +17,6 @@
 
         </android.support.v7.widget.RecyclerView>
 
-        <TextView
-            android:id="@+id/tv_error_message_display"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/error_message_display_padding"
-            android:text="@string/error_message_connectivity"
-            android:textSize="@dimen/text_size_22_sp"
-            android:visibility="invisible" />
-
         <ProgressBar
             android:id="@+id/pb_shows_loading_indicator"
             android:layout_width="@dimen/pb_indicator_size"
