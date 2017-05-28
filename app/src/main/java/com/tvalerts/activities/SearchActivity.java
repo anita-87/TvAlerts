@@ -123,7 +123,7 @@ public class SearchActivity extends AppCompatActivity implements LoaderManager.L
         mShowsRecyclerView.smoothScrollToPosition(mPosition);
 
         if (data.getCount() != 0)
-            showShoDataView();
+            showShowsDataView();
     }
 
     @Override
@@ -147,7 +147,7 @@ public class SearchActivity extends AppCompatActivity implements LoaderManager.L
         mProgressBarIndicator.setVisibility(View.VISIBLE);
     }
 
-    private void showShoDataView() {
+    private void showShowsDataView() {
         mProgressBarIndicator.setVisibility(View.INVISIBLE);
         mShowsRecyclerView.setVisibility(View.VISIBLE);
     }
