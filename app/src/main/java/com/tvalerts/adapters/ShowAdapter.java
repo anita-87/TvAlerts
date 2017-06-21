@@ -7,6 +7,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.FilterQueryProvider;
+import android.widget.Filterable;
 import android.widget.TextView;
 
 import com.cnleon.tvalerts.R;
@@ -16,10 +19,13 @@ import com.tvalerts.activities.SearchActivity;
  * Created by anita on 6/05/17.
  */
 
-public class ShowAdapter extends RecyclerView.Adapter<ShowAdapter.ShowViewHolder> {
+public class ShowAdapter extends RecyclerView.Adapter<ShowAdapter.ShowViewHolder> implements Filterable, CursorFilter.CursorFilterClient {
 
     private final Context mContext;
+    private Cursor mOriginalCursor;
     private Cursor mCursor;
+    private CursorFilter mCursorFilter;
+    private FilterQueryProvider mFilterQueryProvider;
 
     public ShowAdapter(@NonNull Context context) {
         mContext = context;
@@ -56,36 +62,41 @@ public class ShowAdapter extends RecyclerView.Adapter<ShowAdapter.ShowViewHolder
         notifyDataSetChanged();
     }
 
-    /*
     @Override
     public Filter getFilter() {
-        return new Filter() {
-            @Override
-            protected FilterResults performFiltering(CharSequence charSequence) {
-                String charString = charSequence.toString();
-                if (charString.isEmpty()) {
-                    mFilteredShowsData = mShowsData;
-                } else {
-                    List<Show> filteredList = new ArrayList<>();
-                    for (Show show : mShowsData) {
-                        if (show.getName().toLowerCase().contains(charString)) {
-                            filteredList.add(show);
-                        }
-                    }
-                    mFilteredShowsData = filteredList;
-                }
-                FilterResults filterResults = new FilterResults();
-                filterResults.values = mFilteredShowsData;
-                return filterResults;
-            }
+        if (mCursorFilter == null) {
+            mCursorFilter = new CursorFilter(this);
+        }
+        return mCursorFilter;
+    }
 
-            @Override
-            protected void publishResults(CharSequence constraint, FilterResults results) {
-                mFilteredShowsData = (List<Show>) results.values;
-                notifyDataSetChanged();
-            }
-        };
-    }*/
+    @Override
+    public CharSequence convertToString(Cursor cursor) {
+        return cursor == null ? "" : cursor.toString();
+    }
+
+    @Override
+    public Cursor runQueryOnBackgroundThread(CharSequence constraint) {
+        if (mFilterQueryProvider != null) {
+            return mFilterQueryProvider.runQuery(constraint);
+        }
+
+        return mCursor;
+    }
+
+    @Override
+    public Cursor getCursor() {
+        return mCursor;
+    }
+
+    @Override
+    public void changeCursor(Cursor cursor) {
+        swapCursor(cursor);
+    }
+
+    public void setmFilterQueryProvider(FilterQueryProvider mFilterQueryProvider) {
+        this.mFilterQueryProvider = mFilterQueryProvider;
+    }
 
     class ShowViewHolder extends RecyclerView.ViewHolder {
 
@@ -101,3 +112,52 @@ public class ShowAdapter extends RecyclerView.Adapter<ShowAdapter.ShowViewHolder
         }
     }
 }
+
+class CursorFilter extends Filter {
+
+    CursorFilterClient mClient;
+
+    CursorFilter(CursorFilterClient client) {
+        mClient = client;
+    }
+
+    @Override
+    public CharSequence convertResultToString(Object resultValue) {
+        return mClient.convertToString((Cursor) resultValue);
+    }
+
+    @Override
+    protected FilterResults performFiltering(CharSequence constraint) {
+        Cursor cursor = mClient.runQueryOnBackgroundThread(constraint);
+
+        FilterResults results = new FilterResults();
+        if (cursor != null) {
+            results.count = cursor.getCount();
+            results.values = cursor;
+        } else {
+            results.count = 0;
+            results.values = null;
+        }
+        return results;
+    }
+
+    @Override
+    protected void publishResults(CharSequence constraint, FilterResults results) {
+        Cursor oldCursor = mClient.getCursor();
+
+        if (results.values != null && results.values != oldCursor) {
+            mClient.changeCursor((Cursor) results.values);
+        }
+    }
+
+    interface CursorFilterClient {
+        CharSequence convertToString(Cursor cursor);
+
+        Cursor runQueryOnBackgroundThread(CharSequence constraint);
+
+        Cursor getCursor();
+
+        void changeCursor(Cursor cursor);
+    }
+}
+

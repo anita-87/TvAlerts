@@ -19,6 +19,7 @@ import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.FilterQueryProvider;
 import android.widget.ProgressBar;
 
 import com.cnleon.tvalerts.R;
@@ -32,7 +33,7 @@ import java.util.List;
 
 import static com.tvalerts.data.ShowsContract.ShowEntry;
 
-public class SearchActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+public class SearchActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>, FilterQueryProvider {
 
     public static final String[] SHOW_PROJECTION = {
             ShowsContract.ShowEntry.COLUMN_SHOW_NAME
@@ -68,6 +69,7 @@ public class SearchActivity extends AppCompatActivity implements LoaderManager.L
 
         //Init the adapter
         mShowAdapter = new ShowAdapter(this);
+        mShowAdapter.setmFilterQueryProvider(this);
         mShowsRecyclerView.setAdapter(mShowAdapter);
         //Call the showLoading method
         showLoading();
@@ -131,6 +133,21 @@ public class SearchActivity extends AppCompatActivity implements LoaderManager.L
         mShowAdapter.swapCursor(null);
     }
 
+    @Override
+    public Cursor runQuery(CharSequence constraint) {
+        String constraintString = constraint.toString();
+        String mSelectionClause;
+        String[] mSelectionArgs;
+        if (constraintString.isEmpty()) {
+            mSelectionClause = null;
+            mSelectionArgs = null;
+        } else {
+            mSelectionClause = ShowEntry.COLUMN_SHOW_NAME + " LIKE ?";
+            mSelectionArgs = new String[]{"%" + constraint.toString() + "%"};
+        }
+        return this.getContentResolver().query(ShowEntry.CONTENT_URI, SHOW_PROJECTION, mSelectionClause, mSelectionArgs, null);
+    }
+
     private void loadAllShows() {
         // Configure the loader
         LoaderManager loaderManager = getSupportLoaderManager();
@@ -187,7 +204,7 @@ public class SearchActivity extends AppCompatActivity implements LoaderManager.L
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                //mShowAdapter.getFilter().filter(newText);
+                mShowAdapter.getFilter().filter(newText);
                 return false;
             }
         });
