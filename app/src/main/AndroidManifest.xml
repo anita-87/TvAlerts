@@ -35,6 +35,9 @@
         <provider
             android:name="com.tvalerts.data.providers.ShowProvider"
             android:authorities="@string/content_authority" />
+        <!-- Services Section -->
+        <service android:name="com.tvalerts.sync.TvAlertsSyncIntentService"
+            android:exported="false" />
     </application>
 
 </manifest>

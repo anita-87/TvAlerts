@@ -26,6 +26,7 @@ import com.cnleon.tvalerts.R;
 import com.tvalerts.adapters.ShowAdapter;
 import com.tvalerts.data.ShowsContract;
 import com.tvalerts.domain.Show;
+import com.tvalerts.sync.TvAlertsSyncUtils;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -52,12 +53,7 @@ public class SearchActivity extends AppCompatActivity implements LoaderManager.L
         setContentView(R.layout.activity_search);
         // Set up the Navigation Up
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        // Insert Fake Data
-        List<ContentValues> contentValues = new ArrayList<>();
-        contentValues.add(createContentValues("65", "Bones", "http://www.tvmaze.com/shows/65/bones", "Scripted", "English", "Ended", "2005-09-13"));
-        contentValues.add(createContentValues("718", "The Tonight Show Starring Jimmy Fallon",
-                "http://api.tvmaze.com/shows/718", "Talk Show", "English", "Running", "2014-02-17"));
-        insertFakeData(this, contentValues);
+
         // Init the variables
         mProgressBarIndicator = (ProgressBar) findViewById(R.id.pb_shows_loading_indicator);
         mShowsRecyclerView = (RecyclerView) findViewById(R.id.rv_shows);
@@ -76,6 +72,9 @@ public class SearchActivity extends AppCompatActivity implements LoaderManager.L
 
         // Initialize the loader
         getSupportLoaderManager().initLoader(ALL_SHOWS_SEARCH_LOADER, null, this);
+
+        // Call initialize method in TvAlertsSyncUtils, to check if data is already initialized
+        TvAlertsSyncUtils.initialize(this);
     }
 
     /**
