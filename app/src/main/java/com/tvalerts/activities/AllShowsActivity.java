@@ -1,10 +1,10 @@
-package com.cnleon.tvalerts.activities;
+package com.tvalerts.activities;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
-import com.cnleon.tvalerts.R;
+import com.tvalerts.R;
 
 public class AllShowsActivity extends AppCompatActivity {
 

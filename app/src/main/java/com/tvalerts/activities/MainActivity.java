@@ -1,4 +1,4 @@
-package com.cnleon.tvalerts.activities;
+package com.tvalerts.activities;
 
 import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
@@ -7,7 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
-import com.cnleon.tvalerts.R;
+import com.tvalerts.R;
 
 /**
  * Main activity of the application.
