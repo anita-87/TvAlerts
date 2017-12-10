@@ -1,4 +1,4 @@
-package com.cnleon.tvalerts;
+package com.tvalerts;
 
 import org.junit.Test;
 
