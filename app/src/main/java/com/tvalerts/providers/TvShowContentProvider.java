@@ -58,6 +58,10 @@ public class TvShowContentProvider extends ContentProvider {
      */
     private TvShowDbHelper mTvShowDbHelper;
 
+    /**
+     * Method that handles the initialization of the Content Provider on startup.
+     * @return true if the provider was successfully loaded, false otherwise
+     */
     @Override
     public boolean onCreate() {
         Context context = getContext();
@@ -100,9 +104,51 @@ public class TvShowContentProvider extends ContentProvider {
         return returnUri;
     }
 
+    /**
+     * Method that handles request to insert a set of new rows, or the default implementation that
+     * will iterate over the values and call insert(Uri, ContentValues) on each of them.
+     * @param uri The content:// URI of the insertion request. This value must never be null.
+     * @param values An array of sets of column_name/value pairs to add to the database. This must not be null.
+     * @return The number of values that were inserted.
+     */
     @Override
     public int bulkInsert(@NonNull Uri uri, @NonNull ContentValues[] values) {
-        return super.bulkInsert(uri, values);
+        SQLiteDatabase db = mTvShowDbHelper.getWritableDatabase();
+        int match = sUriMatcher.match(uri);
+
+
+        switch (match) {
+            case SHOWS:
+                // We create a transaction, a way to mark the start of a large data transfer.
+                db.beginTransaction();
+                int rowsInserted = 0;
+                try {
+                    // Try to insert all the values
+                    for (ContentValues value: values) {
+                        long _id = db.insert(TABLE_NAME,
+                                null,
+                                value
+                        );
+                        // Only update the rows inserted if an actual row was inserted
+                        if (_id != -1) {
+                            rowsInserted++;
+                        }
+                    }
+                    // Mark the transaction as successful
+                    db.setTransactionSuccessful();
+                } finally {
+                    // Executes after the try is completed
+                    // Mark the end of the large data transfer or transaction
+                    db.endTransaction();
+                }
+                // Notify the change if the rows inserted is larger than 0
+                if (rowsInserted > 0 && getContext() != null) {
+                    getContext().getContentResolver().notifyChange(uri, null);
+                }
+            default:
+                return super.bulkInsert(uri, values);
+        }
+
     }
 
     /**
