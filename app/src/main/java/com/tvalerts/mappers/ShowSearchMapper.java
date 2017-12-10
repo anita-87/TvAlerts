@@ -1,6 +1,10 @@
 package com.tvalerts.mappers;
 
+import android.content.ContentValues;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import com.tvalerts.data.TvShowContract.*;
 
 /**
  * Mapper class for the response of a Tv Show search in the TvMaze REST API.
@@ -108,5 +112,18 @@ public class ShowSearchMapper {
      */
     public void setOriginalImage(String originalImage) {
         this.originalImage = originalImage;
+    }
+
+    /**
+     * Converts the class to ContentValues type
+     * @return The representation of the object as a ContentValues instance.
+     */
+    public ContentValues toContentValues() {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(TvShowEntry.COLUMN_SHOW_ID, id);
+        contentValues.put(TvShowEntry.COLUMN_SHOW_URL, url);
+        contentValues.put(TvShowEntry.COLUMN_SHOW_NAME, name);
+        contentValues.put(TvShowEntry.COLUMN_SHOW_IMAGE, mediumImage);
+        return contentValues;
     }
 }
