@@ -1,5 +1,6 @@
 package com.tvalerts.data;
 
+import android.net.Uri;
 import android.provider.BaseColumns;
 
 /**
@@ -12,6 +13,19 @@ import android.provider.BaseColumns;
 public final class TvShowContract {
 
     /**
+     * Constant value for the Authority for the Content Provider.
+     */
+    public static final String AUTHORITY = "com.tvalerts";
+    /**
+     * Constant value for the base content Uri for the Content Provider.
+     */
+    public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + AUTHORITY);
+    /**
+     * Constant value for a path to the Tv shows for the Content Provider.
+     */
+    public static final String PATH_SHOWS = "shows";
+
+    /**
      * Private constructor in order to prevent that the contract class is instantiated.
      */
     private TvShowContract() {}
@@ -20,6 +34,11 @@ public final class TvShowContract {
      * Inner class that defines the table content
      */
     public static class TvShowEntry implements BaseColumns {
+        /**
+         * TvShowEntry content URI = BASE_CONTENT_URI + PATH_SHOWS
+         */
+        public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon()
+                .appendPath(PATH_SHOWS).build();
         /**
          * Constant for the name of the table in the database.
          */

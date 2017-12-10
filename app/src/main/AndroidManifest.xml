@@ -9,6 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
+        <!-- MainActivity of the application -->
         <activity android:name=".activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -16,10 +18,17 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <!-- AllShowsActivity, for list of available Tv shows -->
         <activity
             android:name=".activities.AllShowsActivity"
             android:label="@string/title_activity_all_shows"
             android:theme="@style/AppTheme.NoActionBar" />
+
+        <!-- Content provider for the Tv shows -->
+        <provider
+            android:authorities="com.tvalerts"
+            android:name="com.tvalerts.providers.TvShowContentProvider"
+            android:exported="false" />
     </application>
 
 </manifest>
