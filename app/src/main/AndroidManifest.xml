@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.tvalerts">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -28,6 +30,11 @@
         <provider
             android:authorities="com.tvalerts"
             android:name="com.tvalerts.providers.TvShowContentProvider"
+            android:exported="false" />
+
+        <!-- Service for the TvShow syncs -->
+        <service
+            android:name=".services.TvShowsSyncIntentService"
             android:exported="false" />
     </application>
 
