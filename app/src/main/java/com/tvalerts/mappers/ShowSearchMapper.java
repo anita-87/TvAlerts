@@ -26,14 +26,9 @@ public class ShowSearchMapper {
      */
     private String name;
     /**
-     * The URL of the medium size image for this Tv show.
+     * The image object of the Tv show.
      */
-    private String mediumImage;
-    /**
-     * The URL of the original size image for this Tv show.
-     */
-    private String originalImage;
-
+    private ImageMapper image;
     /**
      * Getter method for the property id
      * @return the id of the Tv show.
@@ -83,35 +78,19 @@ public class ShowSearchMapper {
     }
 
     /**
-     * Getter method for the property mediumImage
-     * @return The string URL of the medium quality image for the Tv show.
+     * Getter method for the property image
+     * @return Object that contains two references of images for the show.
      */
-    public String getMediumImage() {
-        return mediumImage;
+    public ImageMapper getImage() {
+        return image;
     }
 
     /**
-     * Setter method for the property mediumImage
-     * @param mediumImage The string URL of the medium quality image for the Tv show.
+     * Setter method for the property image
+     * @param image Object that contains two references of images for the show.
      */
-    public void setMediumImage(String mediumImage) {
-        this.mediumImage = mediumImage;
-    }
-
-    /**
-     * Getter method for the property originalImage
-     * @return The string URL of the original quality image for the Tv show.
-     */
-    public String getOriginalImage() {
-        return originalImage;
-    }
-
-    /**
-     * Setter method for the property originalImage
-     * @param originalImage The string URL of the original quality image for the Tv show.
-     */
-    public void setOriginalImage(String originalImage) {
-        this.originalImage = originalImage;
+    public void setImage(ImageMapper image) {
+        this.image = image;
     }
 
     /**
@@ -123,7 +102,11 @@ public class ShowSearchMapper {
         contentValues.put(TvShowEntry.COLUMN_SHOW_ID, id);
         contentValues.put(TvShowEntry.COLUMN_SHOW_URL, url);
         contentValues.put(TvShowEntry.COLUMN_SHOW_NAME, name);
-        contentValues.put(TvShowEntry.COLUMN_SHOW_IMAGE, mediumImage);
+        if (image != null) {
+            contentValues.put(TvShowEntry.COLUMN_SHOW_IMAGE, image.getMedium());
+        } else {
+            contentValues.put(TvShowEntry.COLUMN_SHOW_IMAGE, "");
+        }
         return contentValues;
     }
 }
