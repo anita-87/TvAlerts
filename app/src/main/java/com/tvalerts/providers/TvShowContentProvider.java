@@ -222,7 +222,7 @@ public class TvShowContentProvider extends ContentProvider {
     public int delete(@NonNull Uri uri, @Nullable String selection, @Nullable String[] selectionArgs) {
         SQLiteDatabase db = mTvShowDbHelper.getWritableDatabase();
         int match = sUriMatcher.match(uri);
-        int tasksDeleted;
+        int showsDeleted;
 
         switch (match) {
             case SHOW_WITH_ID:
@@ -233,20 +233,26 @@ public class TvShowContentProvider extends ContentProvider {
                 String mSelection = "_id=?";
                 // Selection args = the row ID from the URI
                 String[] mSelectionArgs = new String[]{id};
-                tasksDeleted = db.delete(TABLE_NAME,
+                showsDeleted = db.delete(TABLE_NAME,
                         mSelection,
                         mSelectionArgs
+                );
+                break;
+            case SHOWS:
+                showsDeleted = db.delete(TABLE_NAME,
+                        null,
+                        null
                 );
                 break;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
         // Only notify if at least one row was deleted
-        if (tasksDeleted > 0 && getContext() != null) {
+        if (showsDeleted > 0 && getContext() != null) {
             getContext().getContentResolver().notifyChange(uri, null);
         }
 
-        return tasksDeleted;
+        return showsDeleted;
     }
 
     /**
