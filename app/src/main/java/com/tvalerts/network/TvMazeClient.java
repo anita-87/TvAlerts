@@ -118,4 +118,33 @@ public class TvMazeClient {
         Log.i(TAG, "Number of shows found: " + showsFound.size());
         return getShowsAsContentValues(showsFound);
     }
+
+    public static List<ShowSearchMapper> getAllTvShowsByPage(int page) {
+        if (page <= 0) {
+            throw new IllegalArgumentException("Page number has to be a positive value");
+        }
+
+        initRestTemplate();
+        boolean moreResultsAvailable = true;
+        List<ShowSearchMapper> showsFound = new ArrayList<>();
+        Log.i(TAG, "Starting the search for all the Tv Shows in TVMaze REST API");
+
+        while (moreResultsAvailable) {
+            try {
+                String query = "page=" + page;
+                String Url = buildStringUrl(PATH_SHOWS, query);
+                ShowSearchMapper[] shows = mRestTemplate.getForObject(Url, ShowSearchMapper[].class);
+                showsFound.addAll(Arrays.asList(shows));
+                page++;
+            } catch (HttpClientErrorException e) {
+                if (e.getStatusCode() == HttpStatus.NOT_FOUND) {
+                    moreResultsAvailable = false;
+                } else {
+                    Log.e(TAG, e.getMessage());
+                }
+            }
+        }
+        Log.i(TAG, "Number of shows found: " + showsFound.size());
+        return showsFound;
+    }
 }
