@@ -4,4 +4,7 @@
     <color name="colorPrimaryDark">#455A64</color>
     <color name="colorAccent">#DD2C00</color>
     <color name="colorWhite">#FFFFFF</color>
+    <color name="colorBlack">#000000</color>
+    <color name="colorGreyDark">#7a7a7a</color>
+    <color name="row_activated">#e0e0e0</color>
 </resources>

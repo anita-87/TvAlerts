@@ -1,3 +1,13 @@
 <resources>
     <dimen name="fab_margin">16dp</dimen>
+    <dimen name="show_item_text_primary">16sp</dimen>
+    <dimen name="icon_width_height">48dp</dimen>
+    <dimen name="tv_show_item_row_height">72dp</dimen>
+    <dimen name="tv_show_item_padding">6dip</dimen>
+    <dimen name="tv_show_item_icon_marginStart">16dp</dimen>
+    <dimen name="tv_show_item_icon_padding">0dp</dimen>
+    <dimen name="tv_show_item_name_padding_start_end">5dp</dimen>
+    <dimen name="tv_show_item_name_margin_start">72dp</dimen>
+    <dimen name="tv_show_item_name_margin_end">16dp</dimen>
+    <dimen name="tv_show_item_name_padding_botom">5dp</dimen>
 </resources>

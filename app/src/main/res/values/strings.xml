@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">TvAlerts</string>
     <string name="title_activity_all_shows">Shows</string>
+    <string name="tv_show_icon_description">Icon profile of the Tv Show</string>
 </resources>
