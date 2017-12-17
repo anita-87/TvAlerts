@@ -119,6 +119,11 @@ public class TvMazeClient {
         return getShowsAsContentValues(showsFound);
     }
 
+    /**
+     * Methods that retrives all the shows available in the TV Maze REST API by page.
+     * @param page The page to query the REST API.
+     * @return list of shows retrive from the REST API or null.
+     */
     public static List<ShowSearchMapper> getAllTvShowsByPage(int page) {
         if (page <= 0) {
             throw new IllegalArgumentException("Page number has to be a positive value");
@@ -126,24 +131,20 @@ public class TvMazeClient {
 
         initRestTemplate();
         boolean moreResultsAvailable = true;
-        List<ShowSearchMapper> showsFound = new ArrayList<>();
-        Log.i(TAG, "Starting the search for all the Tv Shows in TVMaze REST API");
+        List<ShowSearchMapper> showsFound = null;
+        Log.i(TAG, "Starting the search for the Tv Shows in TVMaze REST API for page: " + page);
 
-        while (moreResultsAvailable) {
-            try {
-                String query = "page=" + page;
-                String Url = buildStringUrl(PATH_SHOWS, query);
-                ShowSearchMapper[] shows = mRestTemplate.getForObject(Url, ShowSearchMapper[].class);
-                showsFound.addAll(Arrays.asList(shows));
-                page++;
-            } catch (HttpClientErrorException e) {
-                if (e.getStatusCode() == HttpStatus.NOT_FOUND) {
-                    moreResultsAvailable = false;
-                } else {
-                    Log.e(TAG, e.getMessage());
-                }
-            }
+        try {
+            String query = "page=" + page;
+            String Url = buildStringUrl(PATH_SHOWS, query);
+            ShowSearchMapper[] shows = mRestTemplate.getForObject(Url, ShowSearchMapper[].class);
+            showsFound.addAll(Arrays.asList(shows));
+            page++;
+        } catch (HttpClientErrorException e) {
+            Log.e(TAG, e.getMessage());
+            return null;
         }
+
         Log.i(TAG, "Number of shows found: " + showsFound.size());
         return showsFound;
     }
