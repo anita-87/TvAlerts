@@ -130,16 +130,14 @@ public class TvMazeClient {
         }
 
         initRestTemplate();
-        boolean moreResultsAvailable = true;
-        List<ShowSearchMapper> showsFound = null;
+        List<ShowSearchMapper> showsFound = new ArrayList<>();
         Log.i(TAG, "Starting the search for the Tv Shows in TVMaze REST API for page: " + page);
 
         try {
             String query = "page=" + page;
-            String Url = buildStringUrl(PATH_SHOWS, query);
-            ShowSearchMapper[] shows = mRestTemplate.getForObject(Url, ShowSearchMapper[].class);
+            String url = buildStringUrl(PATH_SHOWS, query);
+            ShowSearchMapper[] shows = mRestTemplate.getForObject(url, ShowSearchMapper[].class);
             showsFound.addAll(Arrays.asList(shows));
-            page++;
         } catch (HttpClientErrorException e) {
             Log.e(TAG, e.getMessage());
             return null;
