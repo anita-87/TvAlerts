@@ -70,6 +70,7 @@ public class TvShowAdapter extends RecyclerView.Adapter<TvShowAdapter.TvShowView
                 .apply(RequestOptions.circleCropTransform())
                 .into(holder.showIcon);
         holder.showName.setText(show.getName());
+        holder.showStatus.setText(show.getStatus());
     }
 
     /**
@@ -98,6 +99,10 @@ public class TvShowAdapter extends RecyclerView.Adapter<TvShowAdapter.TvShowView
          * TextView that represents the Tv Show name.
          */
         TextView showName;
+        /**
+         * TextView that represents the Tv Show status.
+         */
+        TextView showStatus;
 
         /**
          * Public constructor of the ViewHolder.
@@ -107,6 +112,7 @@ public class TvShowAdapter extends RecyclerView.Adapter<TvShowAdapter.TvShowView
             super(view);
             showIcon = view.findViewById(R.id.iv_show_icon);
             showName = view.findViewById(R.id.tv_show_name);
+            showStatus = view.findViewById(R.id.tv_show_status);
         }
     }
 }

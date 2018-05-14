@@ -4,6 +4,7 @@ import android.content.ContentValues;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import com.tvalerts.data.TvShowContract;
 import com.tvalerts.data.TvShowContract.*;
 
 /**
@@ -29,6 +30,11 @@ public class ShowSearchMapper {
      * The image object of the Tv show.
      */
     private ImageMapper image;
+    /**
+     * The status of the Tv show.
+     * For example, Running, Ended, etc.
+     */
+    private String status;
     /**
      * Getter method for the property id
      * @return the id of the Tv show.
@@ -91,6 +97,22 @@ public class ShowSearchMapper {
      */
     public void setImage(ImageMapper image) {
         this.image = image;
+    }
+
+    /**
+     * Getter method for the property status
+     * @return The status of the show.
+     */
+    public String getStatus() {
+        return status;
+    }
+
+    /**
+     * Setter method for the property status
+     * @param status The string that represents the status of the show.
+     */
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     /**

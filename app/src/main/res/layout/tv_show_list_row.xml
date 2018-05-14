@@ -27,10 +27,24 @@
         android:paddingEnd="@dimen/tv_show_item_name_padding_start_end"
         android:paddingStart="@dimen/tv_show_item_name_padding_start_end"
         android:textColor="@color/colorBlack"
+        android:textAllCaps="true"
+        android:textStyle="bold"
         android:layout_alignTop="@id/iv_show_icon"
         android:layout_alignParentEnd="true"
         android:layout_marginStart="@dimen/tv_show_item_name_margin_start"
         android:layout_marginEnd="@dimen/tv_show_item_name_margin_end"
         android:paddingBottom="@dimen/tv_show_item_name_padding_botom"/>
+
+    <TextView
+        android:id="@+id/tv_show_status"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorBlack"
+        android:textSize="@dimen/show_item_text_primary"
+        android:paddingEnd="@dimen/tv_show_item_name_padding_start_end"
+        android:paddingStart="@dimen/tv_show_item_name_padding_start_end"
+        android:layout_below="@+id/tv_show_name"
+        android:layout_marginStart="@dimen/tv_show_item_name_margin_start"
+        android:layout_marginEnd="@dimen/tv_show_item_name_margin_end"/>
 
 </RelativeLayout>
