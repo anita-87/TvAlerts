@@ -23,6 +23,8 @@ import com.tvalerts.mappers.ShowMapper;
 import com.tvalerts.mappers.ShowSearchMapper;
 import com.tvalerts.network.TvMazeClient;
 
+import org.w3c.dom.Text;
+
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -166,6 +168,8 @@ public class AllShowsActivity extends AppCompatActivity implements SearchView.On
             if (activity != null) {
                 ProgressBar progressBar = activity.findViewById(R.id.pb_shows_by_page);
                 RecyclerView recyclerView = activity.findViewById(R.id.rv_tv_shows);
+                TextView textView = activity.findViewById(R.id.tv_all_shows_error_message);
+                textView.setVisibility(View.INVISIBLE);
                 recyclerView.setVisibility(View.INVISIBLE);
                 progressBar.setVisibility(View.VISIBLE);
             } else {
@@ -214,10 +218,12 @@ public class AllShowsActivity extends AppCompatActivity implements SearchView.On
                         recyclerView.setVisibility(View.VISIBLE);
                     } else {
                         recyclerView.setVisibility(View.INVISIBLE);
+                        errorMessage.setText(R.string.tv_maze_api_not_shows_found);
                         errorMessage.setVisibility(View.VISIBLE);
                     }
                 } else {
                     recyclerView.setVisibility(View.INVISIBLE);
+                    errorMessage.setText(R.string.tv_maze_api_connection_error);
                     errorMessage.setVisibility(View.VISIBLE);
                 }
             } else {
@@ -261,6 +267,8 @@ public class AllShowsActivity extends AppCompatActivity implements SearchView.On
             if (activity != null) {
                 ProgressBar progressBar = activity.findViewById(R.id.pb_shows_by_page);
                 RecyclerView recyclerView = activity.findViewById(R.id.rv_tv_shows);
+                TextView textView = activity.findViewById(R.id.tv_all_shows_error_message);
+                textView.setVisibility(View.INVISIBLE);
                 recyclerView.setVisibility(View.INVISIBLE);
                 progressBar.setVisibility(View.VISIBLE);
             } else {
@@ -313,7 +321,7 @@ public class AllShowsActivity extends AppCompatActivity implements SearchView.On
                         recyclerView.setVisibility(View.VISIBLE);
                     } else {
                         recyclerView.setVisibility(View.INVISIBLE);
-                        // TODO: Include a message if there are no records found!
+                        errorMessage.setText(R.string.tv_maze_api_not_shows_found);
                         errorMessage.setVisibility(View.VISIBLE);
                     }
                 } else {
@@ -322,7 +330,6 @@ public class AllShowsActivity extends AppCompatActivity implements SearchView.On
                 }
             } else {
                 Log.e(TAG, "There was an error trying to get the reference to the activity");
-                // TODO: what to show here?
             }
         }
     }
