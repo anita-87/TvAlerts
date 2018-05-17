@@ -1,9 +1,7 @@
 package com.tvalerts.activities;
 
-import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -23,11 +21,8 @@ import com.tvalerts.mappers.ShowMapper;
 import com.tvalerts.mappers.ShowSearchMapper;
 import com.tvalerts.network.TvMazeClient;
 
-import org.w3c.dom.Text;
-
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 /**

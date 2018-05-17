@@ -3,9 +3,7 @@ package com.tvalerts.mappers;
 import android.content.ContentValues;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
-import com.tvalerts.data.TvShowContract;
-import com.tvalerts.data.TvShowContract.*;
+import com.tvalerts.data.TvShowContract.TvShowEntry;
 
 /**
  * Mapper class for the response of a Tv Show search in the TvMaze REST API.
