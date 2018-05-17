@@ -3,6 +3,7 @@ package com.tvalerts.network;
 import android.content.ContentValues;
 import android.util.Log;
 
+import com.tvalerts.mappers.ShowMapper;
 import com.tvalerts.mappers.ShowSearchMapper;
 
 import org.springframework.http.HttpStatus;
@@ -38,27 +39,31 @@ public class TvMazeClient {
      */
     private static final String PATH_SHOWS = "shows";
     /**
+     * Constant value for the path of search in the TV Maze REST API URL.
+     */
+    private static final String PATH_SEARCH = "search";
+    /**
      * Template to create HTTP connections and handle errors.
      */
     private static RestTemplate mRestTemplate;
 
     /**
      * Method used to build the TV Maze URLs as string values.
-     * @param path The relative path in the URL to consult. This value cannot be null.
+     * @param paths The relative path in the URL to consult. This value cannot be null.
      * @param query The query value for the request, for example, "page=1". This value can be null.
      * @return a string representation of a URL in the TV Maze REST API.
      */
-    private static String buildStringUrl(String path, String query) {
+    private static String buildStringUrl(String query, String... paths) {
         UriComponents uriComponents;
-        if (path == null) {
+        if (paths == null) {
             throw new IllegalArgumentException("Parameter path is mandatory");
         }
         if (query == null) {
             uriComponents = UriComponentsBuilder.newInstance()
-                    .scheme(PROTOCOL).host(HOST).path(path).build();
+                    .scheme(PROTOCOL).host(HOST).pathSegment(paths).build();
         } else {
             uriComponents = UriComponentsBuilder.newInstance()
-                    .scheme(PROTOCOL).host(HOST).path(path).query(query).build();
+                    .scheme(PROTOCOL).host(HOST).pathSegment(paths).query(query).build();
         }
         return uriComponents.toUriString();
     }
@@ -79,10 +84,10 @@ public class TvMazeClient {
      * @param shows The list of shows obtained from the TV Maze REST API.
      * @return array of ContentValues parsed from the list.
      */
-    private static ContentValues[] getShowsAsContentValues(List<ShowSearchMapper> shows) {
+    private static ContentValues[] getShowsAsContentValues(List<ShowMapper> shows) {
         ContentValues[] contentValues = new ContentValues[shows.size()];
         int i = 0;
-        for (ShowSearchMapper show : shows) {
+        for (ShowMapper show : shows) {
             contentValues[i] = show.toContentValues();
             i++;
         }
@@ -96,15 +101,15 @@ public class TvMazeClient {
     public static ContentValues[] getAllTvShows() {
         initRestTemplate();
         boolean moreResultsAvailable = true;
-        List<ShowSearchMapper> showsFound = new ArrayList<>();
+        List<ShowMapper> showsFound = new ArrayList<>();
         int page = 1;
         Log.i(TAG, "Starting the search for all the Tv Shows in TVMaze REST API");
 
         while (moreResultsAvailable) {
             try {
                 String query = "page=" + String.valueOf(page);
-                String Url = buildStringUrl(PATH_SHOWS, query);
-                ShowSearchMapper[] shows = mRestTemplate.getForObject(Url, ShowSearchMapper[].class);
+                String Url = buildStringUrl(query, PATH_SHOWS);
+                ShowMapper[] shows = mRestTemplate.getForObject(Url, ShowMapper[].class);
                 showsFound.addAll(Arrays.asList(shows));
                 page++;
             } catch (HttpClientErrorException e) {
@@ -120,30 +125,55 @@ public class TvMazeClient {
     }
 
     /**
-     * Methods that retrives all the shows available in the TV Maze REST API by page.
+     * Methods that retrieves all the shows available in the TV Maze REST API by page.
      * @param page The page to query the REST API.
      * @return list of shows retrive from the REST API or null.
      */
-    public static List<ShowSearchMapper> getAllTvShowsByPage(int page) {
+    public static List<ShowMapper> getAllTvShowsByPage(int page) {
         if (page <= 0) {
             throw new IllegalArgumentException("Page number has to be a positive value");
         }
 
         initRestTemplate();
-        List<ShowSearchMapper> showsFound = new ArrayList<>();
+        List<ShowMapper> showsFound = new ArrayList<>();
         Log.i(TAG, "Starting the search for the Tv Shows in TVMaze REST API for page: " + page);
 
         try {
             String query = "page=" + page;
-            String url = buildStringUrl(PATH_SHOWS, query);
-            ShowSearchMapper[] shows = mRestTemplate.getForObject(url, ShowSearchMapper[].class);
+            String url = buildStringUrl(query, PATH_SHOWS);
+            ShowMapper[] shows = mRestTemplate.getForObject(url, ShowMapper[].class);
             showsFound.addAll(Arrays.asList(shows));
+            Log.i(TAG, "Number of shows found: " + showsFound.size());
+            return showsFound;
         } catch (HttpClientErrorException e) {
             Log.e(TAG, e.getMessage());
             return null;
         }
+    }
 
-        Log.i(TAG, "Number of shows found: " + showsFound.size());
-        return showsFound;
+    /**
+     * Methods that retrieves all the shows available in the TV Maze REST API matching the query parameter passed.
+     * @param query - The string used to perform a search against the REST API.
+     * @return list of shows retrive from the REST API or null.
+     */
+    public static List<ShowSearchMapper> queryTvShows(String query) {
+        if (query.isEmpty()) {
+            return null;
+        } else {
+            initRestTemplate();
+            List<ShowSearchMapper> showsFound = new ArrayList<>();
+            Log.i(TAG, "Starting the search for the Tv Shows in TVMaze REST API starting by: " + query);
+            try {
+                String queryParameter = "q=" + query;
+                String url = buildStringUrl(queryParameter, PATH_SEARCH, PATH_SHOWS);
+                ShowSearchMapper[] shows = mRestTemplate.getForObject(url, ShowSearchMapper[].class);
+                showsFound.addAll(Arrays.asList(shows));
+                Log.i(TAG, "Number of shows found: " + showsFound.size());
+                return showsFound;
+            } catch (HttpClientErrorException e) {
+                Log.e(TAG, e.getMessage());
+                return null;
+            }
+        }
     }
 }

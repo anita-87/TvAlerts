@@ -4,4 +4,5 @@
     <string name="tv_show_icon_description">Icon profile of the Tv Show</string>
     <string name="tv_maze_api_connection_error">There was an error connecting with the server.
     \nPlease try again later.</string>
+    <string name="string_search">Search</string>
 </resources>

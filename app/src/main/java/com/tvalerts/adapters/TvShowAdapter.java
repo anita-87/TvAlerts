@@ -11,7 +11,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.tvalerts.R;
-import com.tvalerts.mappers.ShowSearchMapper;
+import com.tvalerts.mappers.ShowMapper;
 
 import java.util.List;
 
@@ -31,7 +31,7 @@ public class TvShowAdapter extends RecyclerView.Adapter<TvShowAdapter.TvShowView
     /**
      * List of Tv shows that are shown.
      */
-    private List<ShowSearchMapper> mShowsList;
+    private List<ShowMapper> mShowsList;
 
     /**
      * Public constructor for the adapter.
@@ -64,11 +64,18 @@ public class TvShowAdapter extends RecyclerView.Adapter<TvShowAdapter.TvShowView
      */
     @Override
     public void onBindViewHolder(TvShowAdapter.TvShowViewHolder holder, int position) {
-        ShowSearchMapper show = mShowsList.get(position);
-        Glide.with(mContext)
-                .load(show.getImage().getMedium())
-                .apply(RequestOptions.circleCropTransform())
-                .into(holder.showIcon);
+        ShowMapper show = mShowsList.get(position);
+        if (show.getImage() != null && show.getImage().getMedium() != null) {
+            Glide.with(mContext)
+                    .load(show.getImage().getMedium())
+                    .apply(RequestOptions.circleCropTransform())
+                    .into(holder.showIcon);
+        } else {
+            Glide.with(mContext)
+                    .load(mContext.getDrawable(R.drawable.ic_live_tv_black))
+                    .apply(RequestOptions.circleCropTransform())
+                    .into(holder.showIcon);
+        }
         holder.showName.setText(show.getName());
         holder.showStatus.setText(show.getStatus());
     }
@@ -82,7 +89,7 @@ public class TvShowAdapter extends RecyclerView.Adapter<TvShowAdapter.TvShowView
         return mShowsList.size();
     }
 
-    public void setShowsList(List<ShowSearchMapper> showsList) {
+    public void setShowsList(List<ShowMapper> showsList) {
         this.mShowsList = showsList;
         notifyItemChanged(0, showsList.size());
     }
