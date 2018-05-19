@@ -6,4 +6,5 @@
     \nPlease try again later.</string>
     <string name="tv_maze_api_not_shows_found">No shows found.</string>
     <string name="string_search">Search</string>
+    <string name="string_unknown_network">Unknown Network</string>
 </resources>

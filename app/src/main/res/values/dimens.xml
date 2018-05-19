@@ -1,6 +1,7 @@
 <resources>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="show_item_text_primary">16sp</dimen>
+    <dimen name="show_item_text_secondary">14sp</dimen>
     <dimen name="icon_width_height">48dp</dimen>
     <dimen name="tv_show_item_row_height">72dp</dimen>
     <dimen name="tv_show_item_padding">6dip</dimen>

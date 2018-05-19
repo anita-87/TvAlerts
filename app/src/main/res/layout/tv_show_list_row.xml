@@ -36,11 +36,12 @@
         android:paddingBottom="@dimen/tv_show_item_name_padding_botom"/>
 
     <TextView
-        android:id="@+id/tv_show_status"
+        android:id="@+id/tv_show_network"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:textColor="@color/colorBlack"
-        android:textSize="@dimen/show_item_text_primary"
+        android:textColor="@color/colorGreyDark"
+        android:textSize="@dimen/show_item_text_secondary"
+        android:textStyle="bold"
         android:paddingEnd="@dimen/tv_show_item_name_padding_start_end"
         android:paddingStart="@dimen/tv_show_item_name_padding_start_end"
         android:layout_below="@+id/tv_show_name"

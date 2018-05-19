@@ -37,6 +37,10 @@ public class ShowMapper {
      */
     @Getter @Setter private String status;
     /**
+     * Information about the network that broadcast the Tv show.
+     */
+    @Getter @Setter private Network network;
+    /**
      * Converts the class to ContentValues type
      * @return The representation of the object as a ContentValues instance.
      */
