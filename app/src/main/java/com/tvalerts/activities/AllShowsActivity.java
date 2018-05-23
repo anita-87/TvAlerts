@@ -2,6 +2,7 @@ package com.tvalerts.activities;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -42,6 +43,10 @@ public class AllShowsActivity extends AppCompatActivity implements SearchView.On
      * Global variable to hold a reference to the SearchView to access it by several methods.
      */
     private SearchView searchView = null;
+    /**
+     * Global variable to hold a reference to the Toolbar to access it by several methods.
+     */
+    private Toolbar toolbar = null;
 
     /**
      * Method executed when the activity is created.
@@ -53,7 +58,7 @@ public class AllShowsActivity extends AppCompatActivity implements SearchView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_all_shows);
         RecyclerView mRecyclerView = findViewById(R.id.rv_tv_shows);
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         // The LinearLayoutManager tells the Recycler view that the view
@@ -68,19 +73,32 @@ public class AllShowsActivity extends AppCompatActivity implements SearchView.On
      * Method called when creating the elements of the menu.
      * It sets the listeners to the menu operations, to search shows and close the search.
      * @param menu - the menu instance included in the activity.
-     * @return true - for the menu to be displayed in the activity.
+     * @return the response from calling the parent activity.
      */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu search in the menu
         getMenuInflater().inflate(R.menu.search_menu, menu);
         final MenuItem searchItem = menu.findItem(R.id.search_show);
-        this.searchView = (SearchView) searchItem.getActionView();
-        this.searchView.setOnQueryTextListener(this);
+        searchView = (SearchView) searchItem.getActionView();
         ImageView closeButton =
-                this.searchView.findViewById(android.support.v7.appcompat.R.id.search_close_btn);
+                searchView.findViewById(android.support.v7.appcompat.R.id.search_close_btn);
         closeButton.setOnClickListener(this);
-        return true;
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.search_show:
+                Log.d(TAG, "onOptionsItemSelected - search_show clicked");
+                break;
+            default:
+                Log.e(TAG, "onOptionsItemSelected - Invalid item id: " + item.getItemId());
+                break;
+        }
+        searchView.setOnQueryTextListener(this);
+        return super.onOptionsItemSelected(item);
     }
 
     /**
@@ -92,7 +110,7 @@ public class AllShowsActivity extends AppCompatActivity implements SearchView.On
     public boolean onQueryTextSubmit(String query) {
         Log.d(TAG, "Searched test is: " + query);
         new LoadTvShowsByQuery(this).execute(query);
-        this.searchView.clearFocus();
+        searchView.clearFocus();
         return true;
     }
 
@@ -115,8 +133,9 @@ public class AllShowsActivity extends AppCompatActivity implements SearchView.On
     @Override
     public void onClick(View view) {
         Log.d(TAG, "SearchView clear button clicked");
-        this.searchView.setQuery("", false);
-        this.searchView.clearFocus();
+        searchView.setQuery("", false);
+        searchView.clearFocus();
+        toolbar.collapseActionView();
         new LoadTvShowsByPage(this).execute(1);
     }
 
