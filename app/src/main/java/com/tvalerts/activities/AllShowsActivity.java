@@ -29,7 +29,8 @@ import java.util.List;
  * Activity that shows all the shows available in the Tv Maze API.
  * Uses a RecyclerView to render the shows.
  */
-public class AllShowsActivity extends AppCompatActivity implements SearchView.OnQueryTextListener, View.OnClickListener {
+public class AllShowsActivity extends AppCompatActivity implements SearchView.OnQueryTextListener,
+        View.OnClickListener {
     /**
      * Simple TAG for logging purposes
      */
@@ -71,6 +72,7 @@ public class AllShowsActivity extends AppCompatActivity implements SearchView.On
     /**
      * Method called when creating the elements of the menu.
      * It sets the listeners to the menu operations, to search shows and close the search.
+     *
      * @param menu - the menu instance included in the activity.
      * @return the response from calling the parent activity.
      */
@@ -102,6 +104,7 @@ public class AllShowsActivity extends AppCompatActivity implements SearchView.On
 
     /**
      * Method that handles the 'search' event from the SearchView.
+     *
      * @param query - the string the user input in to search for the show.
      * @return true - since the action was handled by the listener.
      */
@@ -116,6 +119,7 @@ public class AllShowsActivity extends AppCompatActivity implements SearchView.On
     /**
      * Method that handles the 'search' event everytime the input text changes.
      * This is not implemented for this activity.
+     *
      * @param newText - the new text introduced by the user.
      * @return false - since the action is not handled by the listener.
      */
@@ -127,6 +131,7 @@ public class AllShowsActivity extends AppCompatActivity implements SearchView.On
     /**
      * Method that handles the click on the 'close' button of the SearchView.
      * Clears the query text and clears the focus from the SearchView.
+     *
      * @param view - the SearchView that perfomed the action. In this case the SearchView.
      */
     @Override
@@ -140,9 +145,10 @@ public class AllShowsActivity extends AppCompatActivity implements SearchView.On
 
     /**
      * Getter method for the Tv shows adapter
+     *
      * @return the Tv shows adapter
      */
-    public TvShowAdapter getShowsAdapter(){
+    public TvShowAdapter getShowsAdapter() {
         return mShowsAdapter;
     }
 
@@ -165,6 +171,7 @@ public class AllShowsActivity extends AppCompatActivity implements SearchView.On
 
         /**
          * Public constructor for the class
+         *
          * @param context The context of the class. It should be the activity calling it.
          */
         LoadTvShowsByPage(AllShowsActivity context) {
@@ -224,7 +231,7 @@ public class AllShowsActivity extends AppCompatActivity implements SearchView.On
                 TextView errorMessage = activity.findViewById(R.id.tv_all_shows_error_message);
                 progressBar.setVisibility(View.INVISIBLE);
                 if (result != null) {
-                    if (result.size() > 0){
+                    if (result.size() > 0) {
                         TvShowAdapter adapter = activity.getShowsAdapter();
                         adapter.setShowsList(result);
                         recyclerView.setAdapter(adapter);
@@ -264,6 +271,7 @@ public class AllShowsActivity extends AppCompatActivity implements SearchView.On
 
         /**
          * Public constructor for the class
+         *
          * @param context The context of the class. It should be the activity calling it.
          */
         LoadTvShowsByQuery(AllShowsActivity context) {
@@ -326,7 +334,7 @@ public class AllShowsActivity extends AppCompatActivity implements SearchView.On
                     if (result.size() > 0) {
                         TvShowAdapter adapter = activity.getShowsAdapter();
                         final List<Show> showList = new ArrayList<>();
-                        for(ShowSearch showSearch : result) {
+                        for (ShowSearch showSearch : result) {
                             showList.add(showSearch.getShow());
                         }
                         adapter.setShowsList(showList);
