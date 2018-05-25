@@ -80,51 +80,6 @@ public class TvMazeClient {
     }
 
     /**
-     * Methods that converts a list of shows to an array of ContentValues.
-     * @param shows The list of shows obtained from the TV Maze REST API.
-     * @return array of ContentValues parsed from the list.
-     */
-    private static ContentValues[] getShowsAsContentValues(List<ShowMapper> shows) {
-        ContentValues[] contentValues = new ContentValues[shows.size()];
-        int i = 0;
-        for (ShowMapper show : shows) {
-            contentValues[i] = show.toContentValues();
-            i++;
-        }
-        return contentValues;
-    }
-
-    /**
-     * Method that retrieves all the shows available in the TV Maze REST API.
-     * @return array of ContentValues with all the shows.
-     */
-    public static ContentValues[] getAllTvShows() {
-        initRestTemplate();
-        boolean moreResultsAvailable = true;
-        List<ShowMapper> showsFound = new ArrayList<>();
-        int page = 1;
-        Log.i(TAG, "Starting the search for all the Tv Shows in TVMaze REST API");
-
-        while (moreResultsAvailable) {
-            try {
-                String query = "page=" + String.valueOf(page);
-                String Url = buildStringUrl(query, PATH_SHOWS);
-                ShowMapper[] shows = mRestTemplate.getForObject(Url, ShowMapper[].class);
-                showsFound.addAll(Arrays.asList(shows));
-                page++;
-            } catch (HttpClientErrorException e) {
-                if (e.getStatusCode() == HttpStatus.NOT_FOUND) {
-                    moreResultsAvailable = false;
-                } else {
-                    Log.e(TAG, e.getMessage());
-                }
-            }
-        }
-        Log.i(TAG, "Number of shows found: " + showsFound.size());
-        return getShowsAsContentValues(showsFound);
-    }
-
-    /**
      * Methods that retrieves all the shows available in the TV Maze REST API by page.
      * @param page The page to query the REST API.
      * @return list of shows retrive from the REST API or null.
