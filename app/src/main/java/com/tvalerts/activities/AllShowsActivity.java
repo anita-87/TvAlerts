@@ -2,7 +2,6 @@ package com.tvalerts.activities;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -18,8 +17,8 @@ import android.widget.TextView;
 
 import com.tvalerts.R;
 import com.tvalerts.adapters.TvShowAdapter;
-import com.tvalerts.mappers.ShowMapper;
-import com.tvalerts.mappers.ShowSearchMapper;
+import com.tvalerts.domains.Show;
+import com.tvalerts.domains.ShowSearch;
 import com.tvalerts.network.TvMazeClient;
 
 import java.lang.ref.WeakReference;
@@ -152,7 +151,7 @@ public class AllShowsActivity extends AppCompatActivity implements SearchView.On
      * It queries the Tv Maze REST API by page.
      * It extends the AsyncTask class to do the remote call in a background thread.
      */
-    public static class LoadTvShowsByPage extends AsyncTask<Integer, Void, List<ShowMapper>> {
+    public static class LoadTvShowsByPage extends AsyncTask<Integer, Void, List<Show>> {
         /**
          * Simple TAG for logging purposes
          */
@@ -199,7 +198,7 @@ public class AllShowsActivity extends AppCompatActivity implements SearchView.On
          * @return the list of shows for the page called or null if there was a connection problem.
          */
         @Override
-        protected List<ShowMapper> doInBackground(Integer... params) {
+        protected List<Show> doInBackground(Integer... params) {
             int page = params[0];
             try {
                 return TvMazeClient.getAllTvShowsByPage(page);
@@ -217,7 +216,7 @@ public class AllShowsActivity extends AppCompatActivity implements SearchView.On
          * @param result the list of shows obtained from the Tv Maze REST API.
          */
         @Override
-        protected void onPostExecute(List<ShowMapper> result) {
+        protected void onPostExecute(List<Show> result) {
             AllShowsActivity activity = activityWeakReference.get();
             if (activity != null) {
                 ProgressBar progressBar = activity.findViewById(R.id.pb_shows_by_page);
@@ -252,7 +251,7 @@ public class AllShowsActivity extends AppCompatActivity implements SearchView.On
      * It performs a search with the given query at Tv Maze REST API.
      * It extends the AsyncTask class to do the remote call in a background thread.
      */
-    public static class LoadTvShowsByQuery extends AsyncTask<String, Void, List<ShowSearchMapper>> {
+    public static class LoadTvShowsByQuery extends AsyncTask<String, Void, List<ShowSearch>> {
         /**
          * Simple TAG for logging purposes
          */
@@ -298,7 +297,7 @@ public class AllShowsActivity extends AppCompatActivity implements SearchView.On
          * @return the list of shows for the page called or null if there was a connection problem.
          */
         @Override
-        protected List<ShowSearchMapper> doInBackground(String... params) {
+        protected List<ShowSearch> doInBackground(String... params) {
             String query = params[0];
             try {
                 return TvMazeClient.queryTvShows(query);
@@ -316,7 +315,7 @@ public class AllShowsActivity extends AppCompatActivity implements SearchView.On
          * @param result the list of shows obtained from the Tv Maze REST API.
          */
         @Override
-        protected void onPostExecute(List<ShowSearchMapper> result) {
+        protected void onPostExecute(List<ShowSearch> result) {
             AllShowsActivity activity = activityWeakReference.get();
             if (activity != null) {
                 ProgressBar progressBar = activity.findViewById(R.id.pb_shows_by_page);
@@ -326,8 +325,8 @@ public class AllShowsActivity extends AppCompatActivity implements SearchView.On
                 if (result != null) {
                     if (result.size() > 0) {
                         TvShowAdapter adapter = activity.getShowsAdapter();
-                        final List<ShowMapper> showList = new ArrayList<>();
-                        for(ShowSearchMapper showSearch : result) {
+                        final List<Show> showList = new ArrayList<>();
+                        for(ShowSearch showSearch : result) {
                             showList.add(showSearch.getShow());
                         }
                         adapter.setShowsList(showList);

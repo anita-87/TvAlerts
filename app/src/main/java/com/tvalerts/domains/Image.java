@@ -1,4 +1,4 @@
-package com.tvalerts.mappers;
+package com.tvalerts.domains;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -7,7 +7,7 @@ import lombok.Setter;
  * Mapper class for the response of a Tv Show image object in the TvMaze REST API.
  */
 
-public class ImageMapper {
+public class Image {
     /**
      * Url to the medium quality image of the Tv show.
      */

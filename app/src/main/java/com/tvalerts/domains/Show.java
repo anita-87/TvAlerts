@@ -1,4 +1,4 @@
-package com.tvalerts.mappers;
+package com.tvalerts.domains;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
@@ -9,7 +9,7 @@ import lombok.Setter;
  * This maps the shows performed via the "shows" path.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class ShowMapper {
+public class Show {
 
     /**
      * The identification of the Tv show in the TvMaze REST API.
@@ -26,7 +26,7 @@ public class ShowMapper {
     /**
      * The image object of the Tv show.
      */
-    @Getter @Setter private ImageMapper image;
+    @Getter @Setter private Image image;
     /**
      * The status of the Tv show.
      * For example, Running, Ended, etc.

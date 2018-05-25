@@ -1,4 +1,4 @@
-package com.tvalerts.mappers;
+package com.tvalerts.domains;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -10,15 +10,15 @@ import lombok.Setter;
  * This maps the shows performed via the "search" path.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class ShowSearchMapper {
+public class ShowSearch {
 
     /**
      * Represents the order of relevancy or closeness of the search with what the user was trying to find.
      */
     @Getter @Setter private String score;
     /**
-     * The actual show infromation.
+     * The actual show information.
      */
-    @Getter @Setter private ShowMapper show;
+    @Getter @Setter private Show show;
 
 }

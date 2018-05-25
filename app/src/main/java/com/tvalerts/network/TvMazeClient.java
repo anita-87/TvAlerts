@@ -1,12 +1,10 @@
 package com.tvalerts.network;
 
-import android.content.ContentValues;
 import android.util.Log;
 
-import com.tvalerts.mappers.ShowMapper;
-import com.tvalerts.mappers.ShowSearchMapper;
+import com.tvalerts.domains.Show;
+import com.tvalerts.domains.ShowSearch;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
@@ -84,19 +82,19 @@ public class TvMazeClient {
      * @param page The page to query the REST API.
      * @return list of shows retrive from the REST API or null.
      */
-    public static List<ShowMapper> getAllTvShowsByPage(int page) {
+    public static List<Show> getAllTvShowsByPage(int page) {
         if (page <= 0) {
             throw new IllegalArgumentException("Page number has to be a positive value");
         }
 
         initRestTemplate();
-        List<ShowMapper> showsFound = new ArrayList<>();
+        List<Show> showsFound = new ArrayList<>();
         Log.i(TAG, "Starting the search for the Tv Shows in TVMaze REST API for page: " + page);
 
         try {
             String query = "page=" + page;
             String url = buildStringUrl(query, PATH_SHOWS);
-            ShowMapper[] shows = mRestTemplate.getForObject(url, ShowMapper[].class);
+            Show[] shows = mRestTemplate.getForObject(url, Show[].class);
             showsFound.addAll(Arrays.asList(shows));
             Log.i(TAG, "Number of shows found: " + showsFound.size());
             return showsFound;
@@ -111,17 +109,17 @@ public class TvMazeClient {
      * @param query - The string used to perform a search against the REST API.
      * @return list of shows retrive from the REST API or null.
      */
-    public static List<ShowSearchMapper> queryTvShows(String query) {
+    public static List<ShowSearch> queryTvShows(String query) {
         if (query.isEmpty()) {
             return null;
         } else {
             initRestTemplate();
-            List<ShowSearchMapper> showsFound = new ArrayList<>();
+            List<ShowSearch> showsFound = new ArrayList<>();
             Log.i(TAG, "Starting the search for the Tv Shows in TVMaze REST API starting by: " + query);
             try {
                 String queryParameter = "q=" + query;
                 String url = buildStringUrl(queryParameter, PATH_SEARCH, PATH_SHOWS);
-                ShowSearchMapper[] shows = mRestTemplate.getForObject(url, ShowSearchMapper[].class);
+                ShowSearch[] shows = mRestTemplate.getForObject(url, ShowSearch[].class);
                 showsFound.addAll(Arrays.asList(shows));
                 Log.i(TAG, "Number of shows found: " + showsFound.size());
                 return showsFound;

@@ -1,4 +1,4 @@
-package com.tvalerts.mappers;
+package com.tvalerts.domains;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 

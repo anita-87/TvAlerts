@@ -11,7 +11,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.tvalerts.R;
-import com.tvalerts.mappers.ShowMapper;
+import com.tvalerts.domains.Show;
 
 import java.util.List;
 
@@ -31,7 +31,7 @@ public class TvShowAdapter extends RecyclerView.Adapter<TvShowAdapter.TvShowView
     /**
      * List of Tv shows that are shown.
      */
-    private List<ShowMapper> mShowsList;
+    private List<Show> mShowsList;
 
     /**
      * Public constructor for the adapter.
@@ -64,7 +64,7 @@ public class TvShowAdapter extends RecyclerView.Adapter<TvShowAdapter.TvShowView
      */
     @Override
     public void onBindViewHolder(TvShowAdapter.TvShowViewHolder holder, int position) {
-        ShowMapper show = mShowsList.get(position);
+        Show show = mShowsList.get(position);
         if (show.getImage() != null && show.getImage().getMedium() != null) {
             Glide.with(mContext)
                     .load(show.getImage().getMedium())
@@ -94,7 +94,7 @@ public class TvShowAdapter extends RecyclerView.Adapter<TvShowAdapter.TvShowView
         return mShowsList.size();
     }
 
-    public void setShowsList(List<ShowMapper> showsList) {
+    public void setShowsList(List<Show> showsList) {
         this.mShowsList = showsList;
         notifyItemChanged(0, showsList.size());
     }
