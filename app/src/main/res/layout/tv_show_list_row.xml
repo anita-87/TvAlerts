@@ -4,7 +4,8 @@
     android:layout_height="@dimen/tv_show_item_row_height"
     android:padding="@dimen/tv_show_item_padding"
     android:clickable="true"
-    android:focusable="true">
+    android:focusable="true"
+    android:background="?android:attr/selectableItemBackground">
 
     <ImageView
         android:id="@+id/iv_show_icon"

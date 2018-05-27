@@ -2,6 +2,7 @@ package com.tvalerts.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +25,10 @@ import java.util.List;
 
 public class TvShowAdapter extends RecyclerView.Adapter<TvShowAdapter.TvShowViewHolder> {
 
+    /**
+     * Simple TAG for logging purposes
+     */
+    private static final String TAG = TvShowAdapter.class.getSimpleName();
     /**
      * The context of the adapter. Usually the class that holds the RecyclerView.
      */
@@ -102,7 +107,7 @@ public class TvShowAdapter extends RecyclerView.Adapter<TvShowAdapter.TvShowView
     /**
      * Inner class used to represent the information shown in the view for each show.
      */
-    class TvShowViewHolder extends RecyclerView.ViewHolder {
+    class TvShowViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         /**
          * ImageView that represents the Tv Show icon or image.
          */
@@ -125,6 +130,13 @@ public class TvShowAdapter extends RecyclerView.Adapter<TvShowAdapter.TvShowView
             showIcon = view.findViewById(R.id.iv_show_icon);
             showName = view.findViewById(R.id.tv_show_name);
             showStatus = view.findViewById(R.id.tv_show_network);
+            view.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            Show showSelected = mShowsList.get(getAdapterPosition());
+            Log.d(TAG, "Show selected is: " + showSelected.getName());
         }
     }
 }
