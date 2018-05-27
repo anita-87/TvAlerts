@@ -30,7 +30,7 @@ import java.util.List;
  * Uses a RecyclerView to render the shows.
  */
 public class AllShowsActivity extends AppCompatActivity implements SearchView.OnQueryTextListener,
-        View.OnClickListener {
+        View.OnClickListener, MenuItem.OnActionExpandListener {
     /**
      * Simple TAG for logging purposes
      */
@@ -85,6 +85,7 @@ public class AllShowsActivity extends AppCompatActivity implements SearchView.On
         ImageView closeButton =
                 searchView.findViewById(android.support.v7.appcompat.R.id.search_close_btn);
         closeButton.setOnClickListener(this);
+        searchItem.setOnActionExpandListener(this);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -141,6 +142,32 @@ public class AllShowsActivity extends AppCompatActivity implements SearchView.On
         searchView.clearFocus();
         toolbar.collapseActionView();
         new LoadTvShowsByPage(this).execute(1);
+    }
+
+    /**
+     * Method that handles what happens when the menu expands.
+     * It has no custom implementation for this option.
+     *
+     * @param menuItem - the menu item that created this event.
+     * @return true since this method is overridden.
+     */
+    @Override
+    public boolean onMenuItemActionExpand(MenuItem menuItem) {
+        return true;
+    }
+
+    /**
+     * Method that handles what happens when the menu expands.
+     * It has no custom implementation for this option.
+     *
+     * @param menuItem - the menu item that created this event.
+     * @return true since this method is overridden.
+     */
+    @Override
+    public boolean onMenuItemActionCollapse(MenuItem menuItem) {
+        Log.d(TAG, "Item is collapsed. Research shows.");
+        new LoadTvShowsByPage(this).execute(1);
+        return true;
     }
 
     /**
