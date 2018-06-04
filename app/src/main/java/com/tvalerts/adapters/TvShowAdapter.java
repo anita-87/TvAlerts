@@ -1,6 +1,7 @@
 package com.tvalerts.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.tvalerts.R;
+import com.tvalerts.activities.ShowActivity;
 import com.tvalerts.domains.Show;
 
 import java.util.List;
@@ -137,6 +139,9 @@ public class TvShowAdapter extends RecyclerView.Adapter<TvShowAdapter.TvShowView
         public void onClick(View view) {
             Show showSelected = mShowsList.get(getAdapterPosition());
             Log.d(TAG, "Show selected is: " + showSelected.getName());
+            Intent intent = new Intent(mContext, ShowActivity.class);
+            intent.putExtra("SHOW_ID", showSelected.getId());
+            mContext.startActivity(intent);
         }
     }
 }

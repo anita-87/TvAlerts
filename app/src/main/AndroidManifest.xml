@@ -25,7 +25,10 @@
             android:name=".activities.AllShowsActivity"
             android:label="@string/title_activity_all_shows"
             android:theme="@style/AppTheme.NoActionBar" />
-
+        <activity
+            android:name=".activities.ShowActivity"
+            android:label="@string/title_activity_show"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

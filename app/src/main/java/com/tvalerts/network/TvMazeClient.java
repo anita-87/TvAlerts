@@ -104,6 +104,21 @@ public class TvMazeClient {
         }
     }
 
+    public static Show getTvShowById(String id) {
+        if (id == null) {
+            throw new IllegalArgumentException("Tv show 'id' cannot be null.");
+        }
+        initRestTemplate();
+        try {
+            String url = buildStringUrl(null, PATH_SHOWS, id);
+            Show show = mRestTemplate.getForObject(url, Show.class);
+            return show;
+        } catch (HttpClientErrorException e) {
+            Log.e(TAG, e.getMessage());
+            return null;
+        }
+    }
+
     /**
      * Methods that retrieves all the shows available in the TV Maze REST API matching the query parameter passed.
      * @param query - The string used to perform a search against the REST API.
