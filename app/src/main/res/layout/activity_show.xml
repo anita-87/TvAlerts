@@ -20,14 +20,26 @@
             app:contentScrim="?attr/colorPrimary"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
             
-            <ImageView
-                android:id="@+id/iv_show_header"
-                android:layout_width="fill_parent"
-                android:layout_height="300dp"
-                android:scaleType="fitXY"
-                android:adjustViewBounds="true"
-                app:layout_collapseMode="parallax"
-                app:layout_collapseParallaxMultiplier="0.7"/>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/iv_show_header"
+                    android:layout_width="fill_parent"
+                    android:layout_height="300dp"
+                    android:scaleType="fitXY"
+                    android:adjustViewBounds="true"
+                    app:layout_collapseMode="parallax"
+                    app:layout_collapseParallaxMultiplier="0.7"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="70dp"
+                    android:layout_alignParentBottom="true"
+                    android:background="@drawable/shape_scrim" />
+
+            </RelativeLayout>
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/tb_show"
