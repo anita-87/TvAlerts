@@ -36,4 +36,8 @@ public class Show {
      * Information about the network that broadcast the Tv show.
      */
     @Getter @Setter private Network network;
+    /**
+     * The summary of the Tv Show.
+     */
+    @Getter @Setter private String summary;
 }
