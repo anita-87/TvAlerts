@@ -80,7 +80,7 @@ public class TvMazeClient {
     /**
      * Methods that retrieves all the shows available in the TV Maze REST API by page.
      * @param page The page to query the REST API.
-     * @return list of shows retrive from the REST API or null.
+     * @return list of shows retrieve from the REST API or null.
      */
     public static List<Show> getAllTvShowsByPage(int page) {
         if (page <= 0) {
@@ -110,9 +110,9 @@ public class TvMazeClient {
         }
         initRestTemplate();
         try {
-            String url = buildStringUrl(null, PATH_SHOWS, id);
-            Show show = mRestTemplate.getForObject(url, Show.class);
-            return show;
+            String queryParameter = "embed=cast";
+            String url = buildStringUrl(queryParameter, PATH_SHOWS, id);
+            return mRestTemplate.getForObject(url, Show.class);
         } catch (HttpClientErrorException e) {
             Log.e(TAG, e.getMessage());
             return null;
