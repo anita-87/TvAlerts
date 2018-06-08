@@ -3,17 +3,20 @@ package com.tvalerts.activities;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.tvalerts.R;
+import com.tvalerts.adapters.ShowPagerAdapter;
 import com.tvalerts.domains.Show;
 import com.tvalerts.network.TvMazeClient;
 import com.tvalerts.utils.glide.CropTransformation;
@@ -22,7 +25,9 @@ import com.tvalerts.utils.window.WindowUtils;
 
 import java.lang.ref.WeakReference;
 
-public class ShowActivity extends AppCompatActivity {
+public class ShowActivity extends AppCompatActivity implements TabLayout.OnTabSelectedListener {
+
+    private ViewPager viewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,8 +38,40 @@ public class ShowActivity extends AppCompatActivity {
         Intent intent = getIntent();
         // TODO: replace SHOW_ID as a constant somewhere
         String id = intent.getStringExtra("SHOW_ID");
+
+        // Setup TabLayout
+        TabLayout tabLayout = findViewById(R.id.tl_show);
+        tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.ic_info));
+        tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.ic_recent_actors));
+        tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+
+        viewPager = findViewById(R.id.vp_show);
+        final ShowPagerAdapter adapter = new ShowPagerAdapter(getSupportFragmentManager(),
+                tabLayout.getTabCount());
+        viewPager.setAdapter(adapter);
+        tabLayout.addOnTabSelectedListener(this);
+        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+        NestedScrollView nestedScrollView = findViewById(R.id.nsv_show);
+        nestedScrollView.setFillViewport(true);
         new LoadTvShow(this).execute(id);
     }
+
+    @Override
+    public void onTabSelected(TabLayout.Tab tab) {
+        viewPager.setCurrentItem(tab.getPosition());
+    }
+
+    @Override
+    public void onTabUnselected(TabLayout.Tab tab) {
+        // No implementation needed.
+    }
+
+    @Override
+    public void onTabReselected(TabLayout.Tab tab) {
+        // No implementation needed.
+    }
+
+
 
     public static class LoadTvShow extends AsyncTask<String, Void, Show> {
 
@@ -51,9 +88,7 @@ public class ShowActivity extends AppCompatActivity {
             ShowActivity activity = activityWeakReference.get();
             if (activity != null) {
                 ProgressBar progressBar = activity.findViewById(R.id.pb_show);
-                TextView textView = activity.findViewById(R.id.tv_scroll_test);
                 progressBar.setVisibility(View.VISIBLE);
-                textView.setVisibility(View.INVISIBLE);
             } else {
                 Log.e(TAG, "There was an error trying to get the reference to the activity");
             }
@@ -75,11 +110,9 @@ public class ShowActivity extends AppCompatActivity {
             ShowActivity activity = activityWeakReference.get();
             if (activity != null) {
                 ProgressBar progressBar = activity.findViewById(R.id.pb_show);
-                TextView textView = activity.findViewById(R.id.tv_scroll_test);
                 Toolbar toolbar = activity.findViewById(R.id.tb_show);
                 ImageView imageView = activity.findViewById(R.id.iv_show_header);
                 progressBar.setVisibility(View.INVISIBLE);
-                textView.setVisibility(View.VISIBLE);
                 if (show != null) {
                     // TODO: Show info here
                     toolbar.setTitle(show.getName());

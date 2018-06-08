@@ -30,6 +30,7 @@ android {
 }
 
 dependencies {
+    implementation 'com.android.support:support-v4:26.1.0'
     compileOnly "org.projectlombok:lombok:1.16.20"
     implementation group: 'org.springframework.android', name: 'spring-android-rest-template', version: '2.0.0.M3'
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.9.3'
