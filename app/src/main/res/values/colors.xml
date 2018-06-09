@@ -7,4 +7,5 @@
     <color name="colorBlack">#000000</color>
     <color name="colorGreyDark">#7a7a7a</color>
     <color name="row_activated">#e0e0e0</color>
+    <color name="colorBackground">#DCEDC8</color>
 </resources>

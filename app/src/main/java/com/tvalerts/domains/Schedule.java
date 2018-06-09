@@ -1,12 +1,19 @@
 package com.tvalerts.domains;
 
+import android.text.TextUtils;
+
 import org.parceler.Parcel;
+
+import java.util.Arrays;
 
 import lombok.Getter;
 import lombok.Setter;
 
 @Parcel
 public class Schedule {
+
+    private static final String[] LABOUR_WEEK_DAYS = {"Monday", "Tuesday", "Wednesday", "Thursday",
+            "Friday"};
     /**
      * The time of the day the show is broadcasted.
      */
@@ -29,5 +36,36 @@ public class Schedule {
     public Schedule(String time, String[] days) {
         this.time = time;
         this.days = days;
+    }
+
+    @Override
+    public String toString() {
+        String schedule;
+        switch (days.length) {
+            case 1:
+                schedule = days[0] + " at " + time;
+                break;
+            case 5:
+                if (Arrays.equals(days, LABOUR_WEEK_DAYS)) {
+                    schedule = "Monday to Friday at " + time;
+                    break;
+                } else {
+                    schedule = TextUtils.join(", ", days) + " at " + time;
+                    break;
+                }
+            case 7:
+                schedule = "Weekly at " + time;
+                break;
+            case 2:
+            case 3:
+            case 4:
+            case 6:
+                schedule = TextUtils.join(", ", days) + " at " + time;
+                break;
+            default:
+                schedule = TextUtils.join(", ", days) + " at " + time;
+                break;
+        }
+        return schedule;
     }
 }

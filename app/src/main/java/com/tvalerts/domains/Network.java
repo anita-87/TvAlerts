@@ -44,4 +44,9 @@ public class Network {
         this.name = name;
         this.country = country;
     }
+
+    @Override
+    public String toString() {
+        return name + " (" + country.getName() + ")";
+    }
 }

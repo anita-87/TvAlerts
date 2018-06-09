@@ -14,7 +14,10 @@
     <dimen name="tv_connection_error_size">16sp</dimen>
     <dimen name="text_margin">16dp</dimen>
     <dimen name="card_margin">16dp</dimen>
-    <dimen name="card_header_text_size">18sp</dimen>
+    <dimen name="card_header_text_size">24sp</dimen>
     <dimen name="card_elevation">50dp</dimen>
     <dimen name="card_round_corners">10dp</dimen>
+    <dimen name="card_detail_subtitle">14sp</dimen>
+    <dimen name="card_details_row_margin_top">5dp</dimen>
+    <dimen name="card_details_text_size">14sp</dimen>
 </resources>

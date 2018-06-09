@@ -9,6 +9,16 @@
     <string name="string_unknown_network">Unknown Network</string>
     <string name="title_activity_show">ShowActivity</string>
     <string name="string_summary">Summary</string>
+    <string name="string_details">Details</string>
+    <string name="string_network">Network</string>
+    <string name="string_type">Type</string>
+    <string name="string_status">Status</string>
+    <string name="string_language">Language</string>
+    <string name="string_genres">Genres</string>
+    <string name="string_premiered">Premiered</string>
+    <string name="string_schedule">Schedule</string>
+    <string name="font_family_sans_serif_condensed">sans-serif-condensed</string>
+    <string name="font_family_sans_serif">sans-serif</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
