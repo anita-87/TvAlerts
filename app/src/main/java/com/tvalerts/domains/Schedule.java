@@ -47,7 +47,7 @@ public class Schedule {
                 break;
             case 5:
                 if (Arrays.equals(days, LABOUR_WEEK_DAYS)) {
-                    schedule = "Monday to Friday at " + time;
+                    schedule = "Monday through Friday at " + time;
                     break;
                 } else {
                     schedule = TextUtils.join(", ", days) + " at " + time;
