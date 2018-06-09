@@ -28,6 +28,7 @@ import java.lang.ref.WeakReference;
 public class ShowActivity extends AppCompatActivity implements TabLayout.OnTabSelectedListener {
 
     private ViewPager viewPager;
+    private TabLayout tabLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,18 +40,10 @@ public class ShowActivity extends AppCompatActivity implements TabLayout.OnTabSe
         // TODO: replace SHOW_ID as a constant somewhere
         String id = intent.getStringExtra("SHOW_ID");
 
-        // Setup TabLayout
-        TabLayout tabLayout = findViewById(R.id.tl_show);
-        tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.ic_info));
-        tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.ic_recent_actors));
-        tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
-
+        // Setup the variables
+        tabLayout = findViewById(R.id.tl_show);
         viewPager = findViewById(R.id.vp_show);
-        final ShowPagerAdapter adapter = new ShowPagerAdapter(getSupportFragmentManager(),
-                tabLayout.getTabCount());
-        viewPager.setAdapter(adapter);
-        tabLayout.addOnTabSelectedListener(this);
-        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+
         NestedScrollView nestedScrollView = findViewById(R.id.nsv_show);
         nestedScrollView.setFillViewport(true);
         new LoadTvShow(this).execute(id);
@@ -71,7 +64,17 @@ public class ShowActivity extends AppCompatActivity implements TabLayout.OnTabSe
         // No implementation needed.
     }
 
+    private void initViewElements(Show show) {
+        tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.ic_info));
+        tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.ic_recent_actors));
+        tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
+        final ShowPagerAdapter adapter = new ShowPagerAdapter(getSupportFragmentManager(),
+                tabLayout.getTabCount(), show);
+        viewPager.setAdapter(adapter);
+        tabLayout.addOnTabSelectedListener(this);
+        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+    }
 
     public static class LoadTvShow extends AsyncTask<String, Void, Show> {
 
@@ -114,7 +117,6 @@ public class ShowActivity extends AppCompatActivity implements TabLayout.OnTabSe
                 ImageView imageView = activity.findViewById(R.id.iv_show_header);
                 progressBar.setVisibility(View.INVISIBLE);
                 if (show != null) {
-                    // TODO: Show info here
                     toolbar.setTitle(show.getName());
                     Glide.with(activity)
                             .load(show.getImage().getOriginal())
@@ -129,6 +131,7 @@ public class ShowActivity extends AppCompatActivity implements TabLayout.OnTabSe
                                                             activity, imageView.getHeight())),
                                     CropTransformation.CropType.TOP)))
                             .into(imageView);
+                    activity.initViewElements(show);
                 } else {
                     // TODO: show error message here
                 }

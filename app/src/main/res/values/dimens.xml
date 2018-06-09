@@ -13,4 +13,8 @@
     <dimen name="tv_show_item_name_padding_botom">5dp</dimen>
     <dimen name="tv_connection_error_size">16sp</dimen>
     <dimen name="text_margin">16dp</dimen>
+    <dimen name="card_margin">16dp</dimen>
+    <dimen name="card_header_text_size">18sp</dimen>
+    <dimen name="card_elevation">50dp</dimen>
+    <dimen name="card_round_corners">10dp</dimen>
 </resources>

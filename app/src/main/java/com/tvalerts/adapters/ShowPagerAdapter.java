@@ -4,6 +4,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import com.tvalerts.domains.Show;
 import com.tvalerts.fragments.ShowCastFragment;
 import com.tvalerts.fragments.ShowInfoFragment;
 
@@ -17,14 +18,17 @@ public class ShowPagerAdapter extends FragmentPagerAdapter {
      */
     private int numberOfTabs;
 
+    private Show show;
+
     /**
      * Constructor for the class.
      * @param fragmentManager - instance of the fragment manager to handle the fragments.
      * @param numberOfTabs - the number of tabs available.
      */
-    public ShowPagerAdapter(FragmentManager fragmentManager, int numberOfTabs) {
+    public ShowPagerAdapter(FragmentManager fragmentManager, int numberOfTabs, Show show) {
         super(fragmentManager);
         this.numberOfTabs = numberOfTabs;
+        this.show = show;
     }
 
     /**
@@ -37,7 +41,7 @@ public class ShowPagerAdapter extends FragmentPagerAdapter {
         switch (position) {
             case 0:
                 // Show Information Tab
-                return new ShowInfoFragment();
+                return ShowInfoFragment.newInstance(show);
             case 1:
                 // Cast Information Tab
                 return new ShowCastFragment();
