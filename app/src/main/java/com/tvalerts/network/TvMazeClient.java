@@ -122,7 +122,7 @@ public class TvMazeClient {
     /**
      * Methods that retrieves all the shows available in the TV Maze REST API matching the query parameter passed.
      * @param query - The string used to perform a search against the REST API.
-     * @return list of shows retrive from the REST API or null.
+     * @return list of shows retrieve from the REST API or null.
      */
     public static List<ShowSearch> queryTvShows(String query) {
         if (query.isEmpty()) {
