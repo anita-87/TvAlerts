@@ -1,8 +1,11 @@
 package com.tvalerts.domains;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import org.parceler.Parcel;
+
+import java.util.Date;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -30,6 +33,18 @@ public class Show {
      */
     @Getter @Setter String name;
     /**
+     * The type of the Tv show.
+     */
+    @Getter @Setter String type;
+    /**
+     * The language of the Tv show.
+     */
+    @Getter @Setter String language;
+    /**
+     * The genres of the Tv show.
+     */
+    @Getter @Setter String[] genres;
+    /**
      * The image object of the Tv show.
      */
     @Getter @Setter Image image;
@@ -39,9 +54,17 @@ public class Show {
      */
     @Getter @Setter String status;
     /**
+     * The date the show was premiered.
+     */
+    @JsonFormat(pattern = "yyyy-mm-dd") @Getter @Setter Date premiered;
+    /**
      * Information about the network that broadcast the Tv show.
      */
     @Getter @Setter Network network;
+    /**
+     * The schedule of the show: day/s and time the show is/was aired.
+     */
+    @Getter @Setter Schedule schedule;
     /**
      * The summary of the Tv Show.
      */
@@ -57,20 +80,31 @@ public class Show {
      * @param id - the identifier of the Tv Show.
      * @param url - the URL link of the show in the TvMaze API.
      * @param name - the name of the Tv show.
+     * @param type - the type of the Tv show.
+     * @param language - the language of the Tv show.
+     * @param genres - array with the genres of the Tv show.
      * @param image - the image class that holds images of the Tv Show.
      * @param status - the status of the Tv Show.
+     * @param premiered - the date the show was premiered.
      * @param network - the network class that holds information
      *                about the Tv network of the Tv Show.
+     * @param schedule - the schedule of the show: day/s and time the show is/was aired.
      * @param summary - a summary of the Tv Show.
      */
-    public Show(String id, String url, String name, Image image,
-                String status, Network network, String summary) {
+    public Show(String id, String url, String name, String type, String language,
+                String[] genres, Image image, String status, Date premiered,
+                Network network, Schedule schedule, String summary) {
         this.id = id;
         this.url = url;
         this.name = name;
+        this.type = type;
+        this.language = language;
+        this.genres = genres;
         this.image = image;
         this.status = status;
+        this.premiered = premiered;
         this.network = network;
+        this.schedule = schedule;
         this.summary = summary;
     }
 }

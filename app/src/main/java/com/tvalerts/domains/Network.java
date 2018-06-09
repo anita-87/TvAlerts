@@ -23,6 +23,10 @@ public class Network {
      * The Name of the Network the Tv Show is being broadcasted on.
      */
     @Getter @Setter String name;
+    /**
+     * The Country of the Network the Tv Show is being broadcasted on.
+     */
+    @Getter @Setter Country country;
 
     /**
      * Default constructor for the Network class.
@@ -30,12 +34,14 @@ public class Network {
     public Network() {}
 
     /**
-     * Constructor for the Network class with two parameters.
+     * Constructor for the Network class with three parameters.
      * @param id - the identifier of the Tv network.
-     * @param name - the name of the Tv network
+     * @param name - the name of the Tv network.
+     * @param country - the country of the Tv network.
      */
-    public Network(Integer id, String name) {
+    public Network(Integer id, String name, Country country) {
         this.id = id;
         this.name = name;
+        this.country = country;
     }
 }
