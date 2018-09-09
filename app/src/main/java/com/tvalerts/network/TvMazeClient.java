@@ -105,7 +105,7 @@ public class TvMazeClient {
     }
 
     public static Show getTvShowById(String id) {
-        if (id == null) {
+       if (id == null) {
             throw new IllegalArgumentException("Tv show 'id' cannot be null.");
         }
         initRestTemplate();

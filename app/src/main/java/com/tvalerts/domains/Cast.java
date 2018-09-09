@@ -1,5 +1,7 @@
 package com.tvalerts.domains;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import org.parceler.Parcel;
 
 import lombok.Getter;
@@ -9,6 +11,7 @@ import lombok.Setter;
  * Mapper class for the Cast of the Tv Show.
  * It holds information about the person and the character that he/she plays.
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 @Parcel
 public class Cast {
     /**
