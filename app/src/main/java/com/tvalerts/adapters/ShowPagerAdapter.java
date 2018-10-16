@@ -44,7 +44,7 @@ public class ShowPagerAdapter extends FragmentPagerAdapter {
                 return ShowInfoFragment.newInstance(show);
             case 1:
                 // Cast Information Tab
-                return new ShowCastFragment();
+                return ShowCastFragment.newInstance(show.getCast().getCast());
             default:
                 return null;
         }
