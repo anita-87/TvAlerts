@@ -1,6 +1,8 @@
 package com.tvalerts.adapters;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -91,7 +93,7 @@ public class CastAdapter extends BaseAdapter implements View.OnClickListener {
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
         view = layoutInflater.inflate(R.layout.cast_list_row, null);
-        buildViewElements(view, cast.get(i));
+        buildViewElements(view, cast.get(i), i);
         return view;
     }
 
@@ -107,6 +109,7 @@ public class CastAdapter extends BaseAdapter implements View.OnClickListener {
                 break;
              default:
                  Log.d(TAG, "Clicked on any other element in the view!");
+                 this.openCastMemberInBrowser((int) view.getTag());
                  break;
         }
     }
@@ -116,7 +119,7 @@ public class CastAdapter extends BaseAdapter implements View.OnClickListener {
      * @param view the view to be built.
      * @param cast the cast member that has to be included for that view.
      */
-    private void buildViewElements (View view, Cast cast) {
+    private void buildViewElements (View view, Cast cast, int index) {
         // Cast Icon
         ImageView castImage = view.findViewById(R.id.iv_cast_icon);
         Image image = cast.getPerson().getImage();
@@ -131,15 +134,28 @@ public class CastAdapter extends BaseAdapter implements View.OnClickListener {
                     .apply(RequestOptions.circleCropTransform())
                     .into(castImage);
         }
+        castImage.setTag(index);
         castImage.setOnClickListener(this);
         // Cast Actor Name
         TextView castNameTextView = view.findViewById(R.id.tv_cast_actor_name);
         castNameTextView.setText(cast.getPerson().getName());
+        castNameTextView.setTag(index);
         castNameTextView.setOnClickListener(this);
         // Cast Character
         TextView castCharacterTextView = view.findViewById(R.id.tv_cast_character);
         castCharacterTextView.setText(cast.getCharacter().getName());
+        castCharacterTextView.setTag(index);
         castCharacterTextView.setOnClickListener(this);
     }
 
+    /**
+     * Starts a new activity that opens the system web browser
+     * to show more information about the actor.
+     * @param index the index of the element that was clicked in the adapter.
+     */
+    private void openCastMemberInBrowser(int index) {
+        Cast cast = this.cast.get(index);
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(cast.getPerson().getUrl()));
+        mContext.startActivity(intent);
+    }
 }

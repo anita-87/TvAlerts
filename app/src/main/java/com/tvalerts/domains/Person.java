@@ -23,6 +23,12 @@ public class Person {
     @Setter
     int id;
     /**
+     * The url with more informatio about the person.
+     */
+    @Getter
+    @Setter
+    String url;
+    /**
      * The name of the person.
      */
     @Getter
@@ -69,6 +75,7 @@ public class Person {
      * Constructor for the Show class with seven parameters.
      *
      * @param id        - identifier of the person in the TvMaze REST API.
+     * @param url       - URL to access the TvMaze page with more information about the page.
      * @param name      - name of the person.
      * @param country   - country the person was born in.
      * @param birthDate - date of birth of the person.
@@ -76,9 +83,10 @@ public class Person {
      * @param gender    - gender of the person.
      * @param image     - image information for the person.
      */
-    public Person(int id, String name, Country country, Date birthDate,
+    public Person(int id, String url, String name, Country country, Date birthDate,
                   Date deathDate, String gender, Image image) {
         this.id = id;
+        this.url = url;
         this.name = name;
         this.country = country;
         this.birthDate = birthDate;
