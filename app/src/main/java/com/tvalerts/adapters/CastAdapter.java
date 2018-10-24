@@ -14,10 +14,15 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.tvalerts.R;
+import com.tvalerts.activities.ImageFullScreenActivity;
 import com.tvalerts.domains.Cast;
 import com.tvalerts.domains.Image;
 
+import org.parceler.Parcels;
+
 import java.util.List;
+
+import static com.tvalerts.utils.constants.Constants.ARG_CAST;
 
 /**
  * Adapter class for the Cast members ListView.
@@ -106,6 +111,7 @@ public class CastAdapter extends BaseAdapter implements View.OnClickListener {
         switch (view.getId()) {
             case R.id.iv_cast_icon:
                 Log.d(TAG, "Clicked on icon!");
+                this.openCastImageFullScreen((int) view.getTag());
                 break;
              default:
                  Log.d(TAG, "Clicked on any other element in the view!");
@@ -156,6 +162,17 @@ public class CastAdapter extends BaseAdapter implements View.OnClickListener {
     private void openCastMemberInBrowser(int index) {
         Cast cast = this.cast.get(index);
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(cast.getPerson().getUrl()));
+        mContext.startActivity(intent);
+    }
+
+    /**
+     * Opens a new activity that shows the image of the acter in full size.
+     * @param index the index of the element that was clicked in the adapter.
+     */
+    private void openCastImageFullScreen(int index) {
+        Cast cast = this.cast.get(index);
+        Intent intent = new Intent(mContext, ImageFullScreenActivity.class);
+        intent.putExtra(ARG_CAST, Parcels.wrap(cast));
         mContext.startActivity(intent);
     }
 }

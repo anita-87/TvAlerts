@@ -18,6 +18,8 @@ import org.parceler.Parcels;
 
 import java.text.DateFormat;
 
+import static com.tvalerts.utils.constants.Constants.ARG_TV_SHOW;
+
 
 /**
  * ShowInfoFragment is simple {@link Fragment} subclass, that contains all the Tv Show information.
@@ -26,10 +28,6 @@ import java.text.DateFormat;
  * create an instance of this fragment.
  */
 public class ShowInfoFragment extends Fragment {
-    /**
-     * Argument used to retrieve the information passed to the fragment.
-     */
-    private static final String ARG_TV_SHOW = "TvShow";
     /**
      * The Tv Show that this fragment shows information about.
      */

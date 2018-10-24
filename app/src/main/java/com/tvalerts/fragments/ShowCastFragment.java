@@ -1,14 +1,11 @@
 package com.tvalerts.fragments;
 
-import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Parcel;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.tvalerts.R;
@@ -17,9 +14,10 @@ import com.tvalerts.domains.Cast;
 
 import org.parceler.Parcels;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import static com.tvalerts.utils.constants.Constants.ARG_CAST;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -30,8 +28,6 @@ import java.util.List;
  * create an instance of this fragment.
  */
 public class ShowCastFragment extends Fragment {
-    private static final String ARG_CAST = "Cast";
-
     private List<Cast> cast;
     private ListView castListView;
 
