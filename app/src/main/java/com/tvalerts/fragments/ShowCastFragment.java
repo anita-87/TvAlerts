@@ -3,10 +3,11 @@ package com.tvalerts.fragments;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 
 import com.tvalerts.R;
 import com.tvalerts.adapters.CastAdapter;
@@ -28,22 +29,27 @@ import static com.tvalerts.utils.constants.Constants.ARG_CAST;
  * create an instance of this fragment.
  */
 public class ShowCastFragment extends Fragment {
+    /**
+     * The list of cast members of the Tv Show.
+     */
     private List<Cast> cast;
-    private ListView castListView;
-
+    /**
+     * Listener of an interaction with the fragment.
+     */
     private OnFragmentInteractionListener mListener;
 
+    /**
+     * Required empty public constructor of the fragment.
+     */
     public ShowCastFragment() {
-        // Required empty public constructor
     }
 
     /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
+     * Factory method to create a new instance of this fragment with the cast array.
      *
+     * @param cast - the array of casts to be shown.
      * @return A new instance of fragment ShowCastFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static ShowCastFragment newInstance(Cast[] cast) {
         ShowCastFragment fragment = new ShowCastFragment();
         Bundle args = new Bundle();
@@ -52,6 +58,12 @@ public class ShowCastFragment extends Fragment {
         return fragment;
     }
 
+    /**
+     * Method that gets called when the Fragment is created.
+     *
+     * @param savedInstanceState - the elements passed to the fragment.
+     *                           In this case the array of cast members for the Tv Show.
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,23 +72,31 @@ public class ShowCastFragment extends Fragment {
         }
     }
 
+    /**
+     * Method that gets called when the view is created.
+     *
+     * @param inflater           - The LayoutInflater object that can be used
+     *                           to inflate any views in the fragment,
+     * @param container          - If non-null, this is the parent view that the fragment's
+     *                           UI should be attached to. The fragment should not add the view itself,
+     *                           but this can be used to generate the LayoutParams of the view.
+     * @param savedInstanceState - If non-null, this fragment is being re-constructed
+     *                           from a previous saved state as given here.
+     * @return
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_show_cast, container, false);
         initVisualElements(view);
-        fillVisualElements(view);
         return view;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
-
+    /**
+     * Called when the fragment is no longer attached to its activity.
+     * This is called after onDestroy().
+     */
     @Override
     public void onDetach() {
         super.onDetach();
@@ -88,23 +108,23 @@ public class ShowCastFragment extends Fragment {
      * fragment to allow an interaction in this fragment to be communicated
      * to the activity and potentially other fragments contained in that
      * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
 
+    /**
+     * Initializes the visual elements in the fragment.
+     *
+     * @param view - the view their elements are being initialized.
+     */
     private void initVisualElements(View view) {
-        this.castListView = view.findViewById(R.id.lv_cast_members);
-        CastAdapter castAdapter = new CastAdapter(getContext(), cast);
-        castListView.setAdapter(castAdapter);
+        RecyclerView recyclerView = view.findViewById(R.id.rv_cast_members);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        CastAdapter castAdapter = new CastAdapter(getContext());
+        castAdapter.setCastList(cast);
+        recyclerView.setAdapter(castAdapter);
     }
 
-    private void fillVisualElements (View view) {
-
-    }
 }
