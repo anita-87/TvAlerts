@@ -170,15 +170,15 @@ public class ShowInfoFragment extends Fragment {
      * Fills in all the visual elements, putting in the proper text on each of them.
      */
     private void fillVisualElements() {
-        networkTextView.setText(StringsUtils.returnValueIfEmpty(show.getNetwork().toString()));
-        typeTextView.setText(StringsUtils.returnValueIfEmpty(show.getType()));
-        statusTextView.setText(StringsUtils.returnValueIfEmpty(show.getStatus()));
-        languageTextView.setText(StringsUtils.returnValueIfEmpty(show.getLanguage()));
-        genresTextView.setText(StringsUtils.returnValueIfEmpty(
+        networkTextView.setText(StringsUtils.returnValueIfEmptyOrNull(show.getNetwork()));
+        typeTextView.setText(StringsUtils.returnValueIfEmptyOrNull(show.getType()));
+        statusTextView.setText(StringsUtils.returnValueIfEmptyOrNull(show.getStatus()));
+        languageTextView.setText(StringsUtils.returnValueIfEmptyOrNull(show.getLanguage()));
+        genresTextView.setText(StringsUtils.returnValueIfEmptyOrNull(
                 TextUtils.join(", ", show.getGenres())));
-        premieredTextView.setText(StringsUtils.returnValueIfEmpty(
+        premieredTextView.setText(StringsUtils.returnValueIfEmptyOrNull(
                 DateFormat.getDateInstance().format(show.getPremiered())));
-        scheduledTextView.setText(StringsUtils.returnValueIfEmpty(show.getSchedule().toString()));
-        summaryTextView.setText(Html.fromHtml(show.getSummary()));
+        scheduledTextView.setText(StringsUtils.returnValueIfEmptyOrNull(show.getSchedule()));
+        summaryTextView.setText(Html.fromHtml(StringsUtils.returnValueIfEmptyOrNull(show.getSummary())));
     }
 }
